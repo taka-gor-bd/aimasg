@@ -1,0 +1,117 @@
+/* ==========================================================================
+   P2P PAGE STYLESHEET (p2p.style.css) - Image-Based Final Design
+   ========================================================================== */
+
+.page-header { text-align: center; margin-bottom: 20px; }
+.page-header .page-title { font-size: 22px; } /* শিরোনাম ছোট করা হয়েছে */
+.page-header .page-subtitle { font-size: 14px; color: var(--subtle-text-color); }
+
+/* ট্যাব নেভিগেশন (নতুন ডিজাইন) */
+.p2p-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px; /* গ্যাপ বাড়ানো হয়েছে */
+    margin-bottom: 25px;
+}
+.p2p-tab-btn {
+    padding: 8px 0; /* প্যাডিং সমন্বয় করা হয়েছে */
+    border: none;
+    background: none;
+    font-size: 16px; /* আকার সমন্বয় করা হয়েছে */
+    font-weight: 600;
+    color: var(--subtle-text-color);
+    cursor: pointer;
+    position: relative;
+}
+.p2p-tab-btn::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 3px;
+    background-color: var(--primary-color);
+    transition: width 0.3s ease;
+}
+.p2p-tab-btn.active {
+    color: var(--primary-color);
+}
+.p2p-tab-btn.active::after {
+    width: 100%;
+}
+
+/* অফার তালিকা */
+.offers-list-container { display: flex; flex-direction: column; gap: 15px; }
+
+/* অফার কার্ড (আপনার ছবির মতো নতুন ডিজাইন) */
+.offer-card {
+    background-color: var(--card-bg-color);
+    border-radius: 15px;
+    padding: 20px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.06);
+    border: 1px solid #f0f0f0;
+}
+.offer-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 15px;
+    border-bottom: 1px solid #f0f0f0;
+    padding-bottom: 15px;
+}
+.offer-avatar { width: 35px; height: 35px; border-radius: 50%; } /* এখন আর প্রয়োজন নেই, তবে রাখা হলো */
+.offer-username { font-weight: 600; font-size: 16px; }
+.offer-rating { font-size: 13px; color: var(--subtle-text-color); }
+.offer-rating .fas { color: #ffc107; }
+
+.offer-body {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* দুটি কলাম */
+    gap: 12px;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+.offer-info-item {
+    background-color: #f8fafc;
+    padding: 10px;
+    border-radius: 8px;
+}
+/* পেমেন্ট বক্সকে দুটি কলামের সমান জায়গা দেওয়া */
+.offer-info-item.full-width {
+    grid-column: span 2;
+}
+.offer-info-label {
+    display: block;
+    color: var(--subtle-text-color);
+    font-size: 13px;
+    margin-bottom: 4px;
+}
+.offer-info-value {
+    font-weight: 700;
+    font-size: 16px;
+}
+.payment-methods { display: flex; gap: 5px; }
+.payment-badge { padding: 3px 10px; border-radius: 5px; font-size: 12px; font-weight: 500; }
+.badge-bkash { background-color: #ffebee; color: #d32f2f; }
+.badge-nagad { background-color: #fff3e0; color: #f57c00; }
+
+.offer-footer { text-align: right; }
+.trade-btn {
+    padding: 10px 30px; /* প্যাডিং বাড়ানো হয়েছে */
+    border-radius: 8px;
+    border: none;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-buy { background-color: #28a745; color: white; }
+.btn-sell { background-color: #dc3545; color: white; }
+
+/* ভাসমান বাটন (অপরিবর্তিত) */
+.fab-create-offer {
+    position: fixed; bottom: 80px; right: 25px; width: 50px; height: 50px;
+    background: var(--gradient); border-radius: 50%; display: flex;
+    align-items: center; justify-content: center; color: white; font-size: 22px;
+    text-decoration: none; box-shadow: 0 4px 15px rgba(0,0,0,0.2); z-index: 1000;
+}

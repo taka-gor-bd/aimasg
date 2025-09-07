@@ -1,0 +1,89 @@
+/* ==========================================================================
+   QUIZ PAGE STYLESHEET (quiz.style.css) - Advanced Version
+   ========================================================================== */
+
+.quiz-screen { display: none; }
+.quiz-screen.active { display: block; animation: fadeIn 0.5s ease-in-out; }
+
+/* কুইজ পরিচিতি কার্ড */
+.quiz-intro-card, .summary-card, .cooldown-card { text-align: center; padding: 30px; }
+.quiz-icon, .summary-icon { font-size: 48px; color: var(--primary-color); margin-bottom: 15px; }
+.quiz-title { font-size: 24px; margin-bottom: 10px; }
+.quiz-description { color: var(--subtle-text-color); line-height: 1.6; margin-bottom: 20px; }
+.quiz-attempts { font-weight: 600; margin-bottom: 25px; }
+.quiz-start-btn {
+    width: 100%; padding: 15px; font-size: 18px; font-weight: 700; border-radius: 12px;
+    border: none; background: var(--gradient); color: var(--white-color); cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+}
+.quiz-start-btn:active, .quiz-start-btn:hover { transform: scale(0.98); box-shadow: none; }
+
+/* কুইজ খেলার স্ক্রিন */
+.question-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.timer-container { position: relative; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; }
+.timer-progress {
+    position: absolute; width: 100%; height: 100%; border-radius: 50%;
+    background: conic-gradient(var(--primary-color) 360deg, #e9ecef 0deg);
+    transition: background 1s linear;
+}
+#timer-text {
+    font-size: 20px; font-weight: 700; color: var(--text-color); /* রঙের সমস্যা সমাধান */
+    position: relative; z-index: 1;
+}
+.question-counter { font-size: 14px; font-weight: 600; background-color: #f1f5f9; padding: 8px 15px; border-radius: 20px; }
+.question-container {
+    background-color: var(--card-bg-color); padding: 25px; border-radius: 15px;
+    text-align: center; margin-bottom: 20px; min-height: 100px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+#question-text { font-size: 18px; line-height: 1.5; }
+
+.answer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.answer-option {
+    padding: 20px 15px; background-color: var(--card-bg-color); border: 2px solid #f1f5f9;
+    border-radius: 12px; text-align: center; font-size: 16px; font-weight: 500;
+    cursor: pointer; transition: all 0.2s ease; box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+.answer-option:hover { border-color: var(--primary-color); transform: translateY(-3px); }
+.answer-option.disabled { pointer-events: none; opacity: 0.7; }
+
+/* ফলাফল (Summary) স্ক্রিন */
+.summary-icon { color: #0dcaf0; }
+.summary-details { margin: 20px 0; font-size: 18px; line-height: 1.8; }
+.summary-details strong { color: var(--primary-color); }
+
+/* কাউন্টডাউন স্ক্রিন */
+.cooldown-icon { font-size: 48px; color: #ffc107; margin-bottom: 15px; }
+.cooldown-timer { font-size: 42px; font-weight: 700; color: var(--danger-color); margin-top: 15px; letter-spacing: 2px; }
+
+/* "আপনি কি প্রস্তুত?" মডাল */
+.ready-check-modal { text-align: center; padding: 30px; }
+.ready-icon { font-size: 48px; color: var(--primary-color); margin-bottom: 15px; }
+.ready-check-modal h3 { font-size: 22px; margin-bottom: 10px; }
+.ready-check-modal p { color: var(--subtle-text-color); margin-bottom: 25px; }
+
+/* ফলাফল মডাল */
+.feedback-modal { text-align: center; padding: 30px; overflow: hidden; }
+#feedback-icon { font-size: 56px; margin-bottom: 15px; }
+#feedback-icon.shake { animation: shake 0.5s cubic-bezier(.36,.07,.19,.97) both; }
+@keyframes shake {
+  10%, 90% { transform: translate3d(-1px, 0, 0); } 20%, 80% { transform: translate3d(2px, 0, 0); }
+  30%, 50%, 70% { transform: translate3d(-4px, 0, 0); } 40%, 60% { transform: translate3d(4px, 0, 0); }
+}
+#feedback-title { font-size: 22px; margin-bottom: 8px; }
+#feedback-message { color: var(--subtle-text-color); margin-bottom: 25px; }
+.next-question-btn {
+    width: 100%; padding: 12px; border: none; border-radius: 10px; background-color: var(--primary-color);
+    color: var(--white-color); font-size: 16px; font-weight: 600; cursor: pointer;
+}
+
+/* কনফেটি অ্যানিমেশন */
+.confetti-container { position: absolute; top: 0; left: 0; width: 100%; height: 100%; pointer-events: none; }
+.confetti {
+    position: absolute; width: 8px; height: 16px; opacity: 0;
+    animation: fall 4s linear forwards;
+}
+@keyframes fall {
+    0% { transform: translateY(-10vh) rotateZ(0deg); opacity: 1; }
+    100% { transform: translateY(110vh) rotateZ(720deg); opacity: 0; }
+}

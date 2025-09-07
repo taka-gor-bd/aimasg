@@ -1,0 +1,32 @@
+/* ==========================================================================
+   P2P TRADE PAGE STYLESHEET (p2p_trade.style.css)
+   ========================================================================== */
+
+.trade-info-card { padding: 20px; margin-bottom: 20px; }
+.trade-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
+.trade-header h2 { margin: 0; font-size: 24px; color: var(--primary-color); }
+.trade-status { padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; background-color: #ffc107; color: #333; }
+.trade-details-grid { display: grid; grid-template-columns: 1fr; gap: 8px; font-size: 14px; }
+.trade-details-grid div { display: flex; justify-content: space-between; }
+.trade-details-grid span { color: var(--subtle-text-color); }
+
+/* চ্যাট বক্স */
+.chat-box-container { background: white; border-radius: 15px; display: flex; flex-direction: column; height: 300px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); }
+.chat-window { flex-grow: 1; padding: 15px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+.chat-message { max-width: 80%; padding: 8px 12px; border-radius: 12px; line-height: 1.5; }
+.chat-message.sent { background-color: var(--primary-color); color: white; align-self: flex-end; border-bottom-right-radius: 2px; }
+.chat-message.received { background-color: #f1f5f9; align-self: flex-start; border-bottom-left-radius: 2px; }
+.chat-input-area { display: flex; border-top: 1px solid #f0f0f0; padding: 10px; }
+.chat-input-area input { flex-grow: 1; border: none; padding: 10px; background: #f8fafc; border-radius: 20px; }
+.chat-input-area input:focus { outline: none; }
+.chat-input-area button { background: none; border: none; font-size: 18px; color: var(--primary-color); cursor: pointer; padding: 0 10px; }
+
+/* অ্যাকশন প্যানেল */
+.action-panel {
+    background: white; padding: 15px; border-radius: 15px; margin-top: 20px;
+    text-align: center; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.action-panel p { margin: 0 0 10px 0; color: var(--subtle-text-color); font-size: 14px; }
+.action-panel .timer { font-size: 18px; font-weight: 700; color: var(--danger-color); margin-bottom: 10px; }
+.action-panel button { width: 100%; }
+.btn-dispute { background-color: #ffc107; color: #333; margin-top: 10px; }

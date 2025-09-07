@@ -1,0 +1,150 @@
+/* ==========================================================================
+   PLAN PAGE STYLESHEET (plan.style.css) - চূড়ান্ত এবং নির্ভুল ডিজাইন
+   ========================================================================== */
+
+.page-title {
+    font-size: 24px;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+.page-subtitle {
+    font-size: 15px;
+    color: var(--subtle-text-color);
+    margin-bottom: 30px;
+    padding: 0 5px;
+}
+.plans-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 25px;
+}
+
+/* প্রতিটি প্ল্যান কার্ডের মূল ডিজাইন */
+.plan-card {
+    position: relative; /* "বর্তমান প্ল্যান" ব্যাজের জন্য */
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    overflow: hidden; /* ভেতরের কন্টেন্ট বাইরে যেতে বাধা দেবে */
+    border: 3px solid transparent; /* গ্রেডিয়েন্ট বর্ডারের জন্য জায়গা */
+    background-clip: padding-box; /* বর্ডারের ভেতর থেকে ব্যাকগ্রাউন্ড শুরু হবে */
+    background-color: var(--card-bg-color);
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.plan-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.12);
+}
+
+/* প্ল্যান অনুযায়ী গ্রেডিয়েন্ট বর্ডার */
+.plan-card.bronze { background-image: var(--plan-bronze-border); }
+.plan-card.silver { background-image: var(--plan-silver-border); }
+.plan-card.gold { background-image: var(--plan-gold-border); }
+.plan-card.diamond { background-image: var(--plan-diamond-border); }
+
+/* বর্তমান প্ল্যান ব্যাজ */
+.current-plan-badge {
+    position: absolute;
+    top: 20px;
+    right: -35px;
+    background-color: var(--primary-color);
+    color: white;
+    padding: 6px 30px;
+    font-size: 12px;
+    font-weight: 600;
+    transform: rotate(45deg);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    z-index: 2;
+}
+
+.plan-icon {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+.plan-card.bronze .plan-icon { color: #cd7f32; }
+.plan-card.silver .plan-icon { color: #c0c0c0; }
+.plan-card.gold .plan-icon { color: #ffd700; }
+.plan-card.diamond .plan-icon { color: #00bfff; }
+
+
+.plan-name {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.plan-price {
+    font-size: 32px;
+    font-weight: 700;
+    color: var(--primary-color);
+    margin-bottom: 20px;
+}
+.plan-price span {
+    font-size: 16px;
+    font-weight: 500;
+    color: var(--subtle-text-color);
+}
+
+.plan-features {
+    list-style: none;
+    padding: 0;
+    margin-bottom: 25px;
+    text-align: left;
+    color: var(--text-color);
+}
+
+.plan-features li {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 15px;
+    padding: 8px 0;
+    border-bottom: 1px solid #f1f5f9;
+}
+.plan-features li:last-child {
+    border-bottom: none;
+}
+
+.plan-features li i {
+    color: var(--primary-color);
+    font-size: 16px;
+}
+
+/* অ্যাকশন বাটন */
+.plan-action-btn {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.btn-upgrade {
+    background: var(--gradient);
+    color: var(--white-color);
+    box-shadow: 0 5px 15px -5px var(--primary-color);
+}
+.btn-upgrade:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px -5px var(--primary-color);
+}
+
+.btn-current {
+    background-color: var(--light-bg-color);
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    cursor: not-allowed;
+}
+
+.btn-downgrade {
+    background-color: #f1f5f9;
+    color: var(--subtle-text-color);
+}
+.btn-downgrade:hover {
+    background-color: #e2e8f0;
+}

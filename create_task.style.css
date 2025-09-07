@@ -1,0 +1,83 @@
+/* ==========================================================================
+   CREATE TASK PAGE STYLESHEET (create_task.style.css) - Advanced Compact
+   ========================================================================== */
+
+.page-header {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 6px;
+    font-size: 14px;
+    color: var(--subtle-text-color);
+}
+
+.form-group input[type="text"],
+.form-group input[type="url"],
+.form-group input[type="number"],
+.form-group textarea {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: 'Noto Sans Bengali', sans-serif;
+    transition: all 0.2s;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+.summary-card {
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    margin-top: 20px;
+    background-color: #f8fafc;
+}
+
+.summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+.summary-row:last-child {
+    margin-bottom: 0;
+}
+
+.summary-row strong {
+    color: var(--primary-color);
+    font-size: 16px;
+}
+
+.balance-error {
+    color: var(--danger-color);
+    font-weight: 500;
+    text-align: center;
+    margin-top: 12px;
+    font-size: 13px;
+}
+
+#submit-task-btn {
+    width: 100%;
+    margin-top: 20px;
+}
+
+#submit-task-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    box-shadow: none;
+}

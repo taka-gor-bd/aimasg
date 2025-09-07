@@ -1,0 +1,58 @@
+/* ==========================================================================
+   PROFILE PAGE STYLESHEET (profile.style.css) - Final Premium Version
+   ========================================================================== */
+.profile-header-card {
+    text-align: center; padding: 20px; padding-top: 50px;
+    position: relative; margin-top: 40px;
+}
+.edit-profile-icon {
+    position: absolute; top: 15px; right: 15px; background: rgba(0,0,0,0.05);
+    border: none; width: 35px; height: 35px; border-radius: 50%; color: var(--text-color);
+    font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: center;
+    text-decoration: none; border: 1px solid #eee;
+}
+.profile-cover {
+    position: absolute; top: 0; left: 0; width: 100%; height: 90px;
+    background: var(--gradient); border-radius: 20px 20px 0 0;
+}
+.profile-avatar-wrapper { position: relative; width: 90px; height: 90px; margin: -45px auto 0 auto; }
+.profile-avatar { width: 100%; height: 100%; border-radius: 50%; border: 4px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.1); object-fit: cover; cursor: pointer; }
+.profile-name { font-size: 20px; font-weight: 700; margin-top: 10px; margin-bottom: 5px; }
+.profile-username { font-size: 14px; color: var(--subtle-text-color); margin-bottom: 20px; }
+
+/* নতুন ডিজাইনের পরিসংখ্যান */
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+    margin-bottom: 20px;
+}
+.stat-item {
+    background-color: #f8fafc;
+    padding: 12px;
+    border-radius: 12px;
+    border: 1px solid #f0f0f0;
+}
+.stat-item span { font-size: 18px; font-weight: 700; display: block; }
+.stat-item label { font-size: 12px; color: var(--subtle-text-color); }
+
+.profile-actions .follow-btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 16px; font-weight: 600; cursor: pointer; background: var(--primary-color); color: white; }
+.profile-actions .follow-btn.following { background: #f1f5f9; color: var(--subtle-text-color); }
+
+.section-header { margin-top: 20px !important; }
+.section-title.small { font-size: 16px; font-weight: 600; }
+
+/* পোস্ট আইটেম (অপরিবর্তিত) */
+.post-item { position: relative; background: white; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.05); margin-bottom: 15px; }
+.delete-post-btn { position: absolute; top: 15px; right: 15px; background: none; border: none; color: #ef4444; font-size: 18px; cursor: pointer; }
+.post-title { font-size: 17px; font-weight: 700; margin-bottom: 8px; }
+.post-message { color: var(--subtle-text-color); line-height: 1.6; white-space: pre-wrap; margin-bottom: 15px; }
+.post-actions { display: flex; gap: 20px; border-top: 1px solid #f0f0f0; padding-top: 15px; }
+.action-button { background: none; border: none; font-size: 14px; font-weight: 600; color: var(--subtle-text-color); cursor: pointer; display: flex; align-items: center; gap: 8px; }
+.action-button.liked { color: var(--danger-color); }
+
+/* অ্যাভাটার মডাল */
+.avatar-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+.avatar-option { width: 80px; height: 80px; border-radius: 50%; cursor: pointer; border: 3px solid transparent; background-color: #f0f2f5; }
+.avatar-option img { width: 100%; height: 100%; object-fit: cover; border-radius: 50%; }
+.avatar-option:hover { border-color: var(--primary-color); }

@@ -1,0 +1,121 @@
+/* ==========================================================================
+   MAIN STYLESHEET (main.style.css) - পিক্সেল পারফেক্ট ডিজাইনসহ চূড়ান্ত ভার্সন
+   ========================================================================== */
+
+:root {
+    /* ... (কালার ভেরিয়েবল আগের মতোই) ... */
+    --primary-color: #28a745; --background-color: #f8f9fa; --card-bg-color: #ffffff;
+    --text-color: #212529; --verified-blue: #1d9bf0;
+    --plan-bronze-border: linear-gradient(45deg, #cd7f32, #a97142);
+    --plan-silver-border: linear-gradient(45deg, #e0e0e0, #b0b0b0);
+    --plan-gold-border: linear-gradient(45deg, #ffd700, #f0c000);
+    --plan-diamond-border: linear-gradient(45deg, #87ceeb, #00bfff);
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+    font-family: 'Noto Sans Bengali', sans-serif; background-color: var(--background-color); color: var(--text-color);
+    padding-top: 90px; padding-bottom: 100px; min-height: 100vh;
+}
+/* ... (অন্যান্য কমন কোড যেমন .bottom-nav, .modal-overlay ইত্যাদি আগের মতোই থাকবে) ... */
+
+/* --- হেডার এবং নতুন প্রোফাইল ডিজাইন --- */
+.header {
+    position: fixed; top: 15px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 420px;
+    display: flex; justify-content: space-between; align-items: center; padding: 8px 15px;
+    background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border-radius: 30px;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1); z-index: 1000;
+}
+.user-info { display: flex; align-items: center; gap: 12px; }
+.user-details { display: flex; flex-direction: column; justify-content: center; }
+.user-name-wrapper { display: flex; align-items: center; gap: 8px; }
+
+/* ১. প্রোফাইল ছবির কন্টেইনার এবং প্রিমিয়াম "গ্লো" ইফেক্ট */
+.profile-picture-container {
+    position: relative;
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    padding: 2px;
+    background: var(--primary-color);
+    flex-shrink: 0;
+    transition: all 0.5s ease;
+    box-shadow: 0 0 0px rgba(0,0,0,0); /* ডিফল্ট শ্যাডো ছাড়া */
+}
+#header-avatar {
+    width: 100%; height: 100%;
+    border-radius: 50%;
+    border: 2px solid var(--card-bg-color);
+}
+/* প্রিমিয়াম প্ল্যানের জন্য বর্ডার এবং গ্লো ইফেক্ট */
+.profile-picture-container.bronze { background: var(--plan-bronze-border); box-shadow: 0 0 10px #cd7f32; }
+.profile-picture-container.silver { background: var(--plan-silver-border); box-shadow: 0 0 10px #c0c0c0; }
+.profile-picture-container.gold { background: var(--plan-gold-border); box-shadow: 0 0 12px #ffd700; }
+.profile-picture-container.diamond { background: var(--plan-diamond-border); box-shadow: 0 0 15px #00bfff; }
+
+/* ২. প্রিমিয়াম 'V' আইকন */
+.premium-icon {
+    display: none; /* ডিফল্টভাবে লুকানো */
+    position: absolute; bottom: -2px; right: -2px;
+    width: 16px; height: 16px;
+    border-radius: 50%; background: var(--primary-color);
+    color: var(--white-color); font-size: 10px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+    border: 2px solid var(--card-bg-color);
+}
+.premium-icon.active { display: flex; }
+.premium-icon.bronze { background: #cd7f32; }
+.premium-icon.silver { background: #c0c0c0; }
+.premium-icon.gold { background: #ffd700; color: #333; }
+.premium-icon.diamond { background: #00bfff; }
+
+/* ৩. নাম এবং ব্লু টিক (সঠিক অ্যালাইনমেন্ট) */
+.user-name {
+    font-weight: 700; font-size: 16px;
+    /* লম্বা নাম (...) দেখানোর জন্য */
+    max-width: 150px; /* আপনার প্রয়োজন মতো পরিবর্তন করতে পারেন */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.verified-badge {
+    display: none; /* ডিফল্টভাবে লুকানো */
+    width: 16px; height: 16px;
+    background-color: var(--verified-blue);
+    color: var(--white-color);
+    border-radius: 50%;
+    font-size: 9px;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    /* প্রিমিয়াম "গ্লো" ইফেক্ট */
+    box-shadow: 0 0 8px var(--verified-blue);
+}
+.verified-badge.active { display: flex; }
+
+.menu-icon i { font-size: 24px; cursor: pointer; color: var(--primary-color); }
+/* ... (বাকি সব কমন কোড আগের মতোই থাকবে) ... */
+.bottom-nav { position: fixed; bottom: 15px; left: 50%; transform: translateX(-50%); width: 95%; max-width: 420px; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); display: flex; justify-content: space-around; align-items: center; height: 60px; border-radius: 30px; padding: 0 10px; box-shadow: 0 5px 20px rgba(0,0,0,0.15); z-index: 1000; }
+.nav-item-wrapper { flex: 1; display: flex; justify-content: center; align-items: center; }
+.nav-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: #aaa; transition: color 0.3s; }
+.nav-item i { font-size: 20px; }
+.nav-item span { font-size: 12px; margin-top: 4px; }
+.nav-item:hover, .nav-item.active { color: var(--primary-color); }
+.modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); z-index: 2000; display: none; align-items: center; justify-content: center; opacity: 0; transition: opacity 0.3s ease; }
+.modal-overlay.active { display: flex; opacity: 1; }
+.modal-content { background: var(--card-bg-color); border-radius: 20px; width: 90%; max-width: 350px; padding: 20px; position: relative; animation: popup-anim 0.3s ease; }
+.close-popup { position: absolute; top: 15px; right: 15px; background: #f1f5f9; border: none; width: 35px; height: 35px; border-radius: 50%; font-size: 16px; color: var(--subtle-text-color); cursor: pointer; display: flex; align-items: center; justify-content: center; z-index: 10; }
+.popup-profile { display: flex; align-items: center; gap: 15px; border-bottom: 1px solid #e5e7eb; padding-bottom: 20px; margin-bottom: 15px; }
+.popup-profile img { width: 60px; height: 60px; border-radius: 50%; }
+.popup-profile-details .name { font-size: 20px; font-weight: 700; }
+.popup-profile-details .edit-profile { font-size: 14px; color: var(--primary-color); text-decoration: none; font-weight: 500; }
+.popup-nav-list a { display: flex; align-items: center; text-decoration: none; color: var(--text-color); padding: 15px; border-radius: 12px; transition: background-color 0.2s; }
+.popup-nav-list a:hover { background-color: #f8f9fa; }
+.popup-nav-list a.active { background-color: #f1fef4; color: var(--primary-color); }
+.popup-nav-list i { font-size: 20px; color: var(--primary-color); width: 40px; }
+.popup-nav-list span { font-size: 16px; font-weight: 500; }
+.popup-nav-list a.logout { color: var(--danger-color); }
+.popup-nav-list a.logout i { color: var(--danger-color); }
+.main-content { padding: 0 15px; max-width: 600px; margin: 0 auto; }
+.card { background: var(--card-bg-color); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: 0 0 15px rgba(0,0,0,0.05); animation: fadeIn 0.5s ease-out forwards; }
+@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes popup-anim { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }

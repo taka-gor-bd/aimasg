@@ -1,0 +1,77 @@
+/* ==========================================================================
+   HOMEPAGE STYLESHEET (home.style.css) - চূড়ান্ত এবং নির্ভুল ডিজাইন
+   ========================================================================== */
+
+/* ... (ব্যালেন্স কার্ড এবং ফিচার গ্রিডের কোড আগের মতোই থাকবে) ... */
+.earning-card { background: var(--gradient); color: var(--white-color); text-align: center; box-shadow: 0 10px 30px -10px var(--primary-color); }
+.balance-details { display: flex; justify-content: space-around; align-items: center; margin-bottom: 25px; }
+.balance-item { flex: 1; }
+.balance-title { font-size: 14px; opacity: 0.9; margin-bottom: 5px; }
+.balance-amount { font-size: 28px; font-weight: 700; }
+.balance-divider { width: 1px; height: 50px; background-color: rgba(255, 255, 255, 0.3); }
+.balance-actions { display: flex; gap: 15px; margin-top: 10px; }
+.action-btn { flex: 1; padding: 14px; border-radius: 12px; border: none; font-size: 16px; font-weight: 700; cursor: pointer; text-decoration: none; display: flex; justify-content: center; align-items: center; gap: 8px; transition: all 0.2s ease-in-out; }
+.deposit-btn { background-color: rgba(255, 255, 255, 0.2); color: var(--white-color); }
+.withdraw-btn { background-color: var(--white-color); color: var(--primary-color); }
+.features-grid-card { padding: 20px; background-color: var(--card-bg-color); border-radius: 20px; box-shadow: var(--shadow); }
+.features-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 20px; }
+.feature-item { display: flex; flex-direction: column; align-items: center; text-decoration: none; color: var(--text-color); text-align: center; }
+.feature-item .icon-bg { width: 55px; height: 55px; background-color: #f0fdf4; border-radius: 18px; display: flex; align-items: center; justify-content: center; margin-bottom: 8px; transition: all 0.3s; }
+.feature-item:hover .icon-bg { background-color: var(--primary-color); transform: translateY(-5px); }
+.feature-item:hover .icon-bg i { color: var(--white-color); }
+.feature-item i { font-size: 22px; color: var(--primary-color); }
+.feature-item span { font-size: 12px; font-weight: 500; }
+.see-more-button { display: flex; align-items: center; justify-content: center; gap: 8px; width: auto; padding: 8px 16px; margin: 0 auto; background-color: #f1f5f9; border-radius: 20px; color: var(--subtle-text-color); font-size: 13px; font-weight: 600; text-decoration: none; transition: all 0.3s ease; }
+.see-more-button:hover { background-color: var(--primary-color); color: var(--white-color); }
+
+/* ৩. নিউজ ফিড সেকশন (চূড়ান্ত ডিজাইন) */
+.section-header { display: flex; justify-content: space-between; align-items: center; margin-top: 30px; margin-bottom: 15px; padding: 0 5px; }
+.section-title { font-size: 18px; font-weight: 700; }
+.see-all-link { font-size: 14px; font-weight: 500; color: var(--primary-color); }
+.feed-container { display: flex; flex-direction: column; gap: 15px; }
+
+.feed-card {
+    background-color: var(--card-bg-color); border-radius: 15px; padding: 15px 20px;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+.feed-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.feed-user-info { display: flex; align-items: center; gap: 12px; }
+.feed-header img { width: 45px; height: 45px; border-radius: 50%; }
+.feed-user .name-wrapper { display: flex; align-items: center; gap: 6px; }
+.feed-user .name { font-weight: 700; font-size: 16px; }
+.feed-user .time { font-size: 13px; color: var(--subtle-text-color); }
+.post-options-btn { background: none; border: none; font-size: 18px; color: var(--subtle-text-color); cursor: pointer; padding: 5px; border-radius: 50%; }
+
+.feed-body {
+    position: relative; /* ভিউ আইকনের অবস্থানের জন্য */
+    padding-bottom: 25px; /* ভিউ আইকনের জন্য জায়গা */
+    line-height: 1.6; color: #333; margin-bottom: 15px;
+}
+.feed-body h4 { font-size: 17px; margin-bottom: 5px; }
+
+/* ভিউ কাউন্টার (সঠিক অবস্থান) */
+.view-counter-body {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    display: flex; align-items: center; gap: 6px; font-size: 12px;
+    color: var(--subtle-text-color); background-color: #f1f5f9;
+    padding: 3px 8px; border-radius: 10px;
+}
+
+.feed-footer { display: flex; justify-content: space-around; border-top: 1px solid #f1f5f9; padding-top: 10px; }
+.footer-action {
+    display: flex; align-items: center; gap: 8px; color: var(--subtle-text-color);
+    cursor: pointer; font-size: 14px; font-weight: 500; transition: transform 0.2s;
+}
+.footer-action:active {
+    transform: scale(0.9); /* ক্লিক করলে ছোট হওয়ার ইফেক্ট */
+}
+.footer-action.liked { color: var(--verified-blue); }
+
+/* ... (থ্রি-ডট মেনুর কোড আগের মতোই) ... */
+.popup-menu-overlay { position: fixed; inset: 0; z-index: 4000; display: none; }
+.popup-menu { position: absolute; background: var(--card-bg-color); border-radius: 12px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); padding: 8px; min-width: 150px; display: flex; flex-direction: column; animation: popup-anim 0.2s ease; }
+.popup-menu a { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 8px; color: var(--text-color); text-decoration: none; font-size: 14px; }
+.popup-menu a:hover { background-color: #f1f5f9; }
+.popup-menu a i { width: 20px; }

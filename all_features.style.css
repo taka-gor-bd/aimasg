@@ -1,0 +1,70 @@
+/* ==========================================================================
+   ALL FEATURES PAGE STYLESHEET (all_features.style.css)
+   ========================================================================== */
+
+/* পেইজের শিরোনামের জন্য স্টাইল */
+.page-title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+    color: var(--text-color);
+}
+
+/* ফিচার গ্রিডের কার্ড (হোমপেজের মতোই) */
+.features-grid-card {
+    padding: 20px;
+    background-color: var(--card-bg-color);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+}
+
+/* ফিচার গ্রিড (হোমপেজের মতোই) */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    /* এই পেইজে 'আরও দেখুন' বাটন না থাকায় নিচের মার্জিন প্রয়োজন নেই */
+}
+
+/* প্রতিটি ফিচার আইটেম (হোমপেজের মতোই) */
+.feature-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-decoration: none;
+    color: var(--text-color);
+    text-align: center;
+}
+
+.feature-item .icon-bg {
+    width: 55px;
+    height: 55px;
+    background-color: #f0fdf4; /* একটি হালকা সবুজ ব্যাকগ্রাউন্ড */
+    border-radius: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 8px;
+    transition: all 0.3s ease;
+}
+
+.feature-item:hover .icon-bg {
+    background-color: var(--primary-color);
+    transform: translateY(-5px);
+    box-shadow: 0 8px 15px -5px var(--primary-color);
+}
+
+.feature-item:hover .icon-bg i {
+    color: var(--white-color);
+}
+
+.feature-item i {
+    font-size: 22px;
+    color: var(--primary-color);
+}
+
+.feature-item span {
+    font-size: 12px;
+    font-weight: 500;
+}

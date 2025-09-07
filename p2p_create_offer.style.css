@@ -1,0 +1,42 @@
+/* ==========================================================================
+   P2P CREATE OFFER PAGE STYLESHEET (p2p_create_offer.style.css)
+   ========================================================================== */
+
+.page-header { text-align: center; margin-bottom: 20px; }
+.form-card { padding: 25px; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 15px; }
+.form-group input[type="number"], .form-group input[type="tel"] {
+    width: 100%; padding: 12px 15px; border: 1px solid #ced4da;
+    border-radius: 8px; font-size: 16px; box-sizing: border-box;
+}
+.form-group input:focus { outline: none; border-color: var(--primary-color); }
+
+/* পেমেন্ট মেথড সিলেকশন */
+.method-select { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+.method-select input[type="checkbox"] { display: none; }
+.method-box {
+    padding: 12px; border: 2px solid #e2e8f0; border-radius: 10px;
+    display: flex; flex-direction: column; align-items: center; gap: 8px;
+    cursor: pointer; transition: all 0.2s;
+}
+.method-box img { height: 28px; }
+.method-box span { font-weight: 500; }
+.method-select input[type="checkbox"]:checked + .method-box {
+    border-color: var(--primary-color);
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.1);
+}
+
+/* সারাংশ কার্ড */
+.summary-card {
+    background-color: #f8fafc; border-radius: 12px;
+    padding: 15px; margin-top: 25px;
+}
+.summary-row { display: flex; justify-content: space-between; margin-bottom: 10px; }
+.summary-row:last-child { margin-bottom: 0; }
+.summary-row span { font-size: 14px; color: var(--subtle-text-color); }
+.summary-row strong { font-size: 16px; font-weight: 700; color: var(--text-color); }
+.error-message { color: var(--danger-color); font-weight: 500; text-align: center; margin-top: 10px; font-size: 14px; }
+
+#submit-offer-btn { width: 100%; margin-top: 25px; }
+#submit-offer-btn:disabled { background: #bdc3c7; cursor: not-allowed; }

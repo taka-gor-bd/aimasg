@@ -1,0 +1,75 @@
+/* ==========================================================================
+   GAMES PAGE STYLESHEET (games.style.css) - 2 Column Grid Update
+   ========================================================================== */
+
+.page-header {
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+.games-grid {
+    display: grid;
+    grid-template-columns: 1fr; /* ডিফল্টভাবে মোবাইলের জন্য একটি কলাম */
+    gap: 20px;
+}
+
+/* বড় স্ক্রিনের জন্য (যেমন ট্যাবলেট) দুটি কলাম */
+@media (min-width: 600px) {
+    .games-grid {
+        grid-template-columns: 1fr 1fr; /* 600px এর বড় স্ক্রিনে দুটি কলাম */
+    }
+}
+
+.game-card {
+    background-color: var(--card-bg-color);
+    border-radius: 20px;
+    padding: 25px;
+    text-align: center;
+    box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+}
+.game-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.1);
+}
+
+.game-card-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px auto;
+    color: white;
+    font-size: 32px;
+}
+
+.game-card:nth-child(1) .game-card-icon { background: #ffc107; }
+.game-card:nth-child(2) .game-card-icon { background: #0dcaf0; }
+.game-card:nth-child(3) .game-card-icon { background: #fd7e14; }
+.game-card:nth-child(4) .game-card-icon { background: #6f42c1; }
+
+.game-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 8px; }
+.game-card p {
+    color: var(--subtle-text-color); font-size: 14px; line-height: 1.6;
+    margin-bottom: 20px; flex-grow: 1; /* বাটনকে নিচে রাখার জন্য */
+}
+
+.game-play-btn {
+    display: inline-block; padding: 12px 30px; background: var(--gradient);
+    color: white; border-radius: 50px; text-decoration: none; font-weight: 600;
+    transition: transform 0.2s;
+}
+.game-play-btn:hover { transform: scale(1.05); }
+
+.game-card.coming-soon { opacity: 0.6; position: relative; overflow: hidden; }
+.game-card.coming-soon .game-play-btn { background: #6c757d; cursor: not-allowed; }
+.coming-soon-badge {
+    position: absolute; top: 15px; right: -35px; background-color: #17a2b8;
+    color: white; padding: 5px 40px; font-size: 12px; font-weight: 700;
+    transform: rotate(45deg);
+}
