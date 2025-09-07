@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নোটিশ বোর্ড</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/notice.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">নোটিশ বোর্ড</h1>
+            <p class="page-subtitle">সকল গুরুত্বপূর্ণ ঘোষণা এবং আপডেট।</p>
+        </div>
+
+        <!-- নোটিশের তালিকা -->
+        <div class="notice-list-container" id="notice-list-container">
+            <p class="loading-text">নোটিশ লোড হচ্ছে...</p>
+        </div>
+    </main>
+
+    <!-- নোটিশের বিস্তারিত দেখার জন্য মডাল -->
+    <div class="modal-overlay" id="notice-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h3 id="modal-notice-title"></h3>
+            <p class="modal-notice-date" id="modal-notice-date"></p>
+            <hr>
+            <p class="modal-notice-message" id="modal-notice-message"></p>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/notice.script.js"></script>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নতুন অফার তৈরি করুন</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/p2p_create_offer.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">বিক্রয়ের অফার তৈরি করুন</h1>
+            <p class="page-subtitle">আপনার ব্যালেন্স বিক্রি করতে নিচের তথ্য পূরণ করুন।</p>
+        </div>
+
+        <div class="card form-card">
+            <form id="create-offer-form">
+                <div class="form-group">
+                    <label for="amount">কত টাকা ব্যালেন্স বিক্রি করতে চান?</label>
+                    <input type="number" id="amount" placeholder="যেমন: ৫০০" min="100" required>
+                </div>
+
+                <div class="form-group">
+                    <label>কোন মাধ্যমে টাকা গ্রহণ করবেন?</label>
+                    <div class="method-select">
+                        <label>
+                            <input type="checkbox" name="paymentMethod" value="bKash">
+                            <div class="method-box"><img src="images/bkash-logo.png" alt="bKash"><span>বিকাশ</span></div>
+                        </label>
+                        <label>
+                            <input type="checkbox" name="paymentMethod" value="Nagad">
+                            <div class="method-box"><img src="images/nagad-logo.png" alt="Nagad"><span>নগদ</span></div>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="payment-number">আপনার পেমেন্ট নাম্বার</label>
+                    <input type="tel" id="payment-number" placeholder="যে নাম্বারে টাকা গ্রহণ করবেন" required>
+                </div>
+
+                <div class="summary-card">
+                    <div class="summary-row">
+                        <span>আপনার বর্তমান ব্যালেন্স:</span>
+                        <strong id="current-balance">৳ ০.০০</strong>
+                    </div>
+                    <div class="summary-row">
+                        <span>অফারের পর ব্যালেন্স থাকবে:</span>
+                        <strong id="remaining-balance">৳ ০.০০</strong>
+                    </div>
+                    <p id="balance-error" class="error-message" style="display: none;">আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই!</p>
+                </div>
+
+                <button type="submit" class="action-btn-primary" id="submit-offer-btn" disabled>অফার পোস্ট করুন</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/p2p_create_offer.script.js"></script>
+</body>
+</html>

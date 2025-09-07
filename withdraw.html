@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>টাকা উত্তোলন</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/withdraw.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">টাকা উত্তোলন</h1>
+            <p class="page-subtitle">আপনার পছন্দের অ্যামাউন্ট সিলেক্ট করুন।</p>
+        </div>
+
+        <!-- ব্যালেন্স কার্ড -->
+        <div class="card balance-display-card">
+            <p>আপনার বর্তমান ব্যালেন্স</p>
+            <h2 id="current-balance">৳ ০.০০</h2>
+        </div>
+
+        <!-- অ্যামাউন্ট সিলেকশন -->
+        <div class="card amount-selection-card">
+            <h3>অ্যামাউন্ট সিলেক্ট করুন</h3>
+            <div class="amount-grid" id="amount-grid">
+                <!-- অ্যামাউন্ট বাটন JS দ্বারা যোগ হবে -->
+            </div>
+            <div class="custom-amount">
+                <label for="custom-amount-input">অথবা আপনার পরিমাণ লিখুন</label>
+                <input type="number" id="custom-amount-input" placeholder="যেমন: ২৫০">
+            </div>
+        </div>
+        
+        <button class="action-btn-primary" id="withdraw-now-btn" disabled>এখনই উইথড্র করুন</button>
+        <p id="error-message" class="error-message"></p>
+    </main>
+
+    <!-- উইথড্র প্রক্রিয়া মডাল -->
+    <div class="modal-overlay" id="withdraw-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            
+            <!-- ধাপ ১: নাম্বার ইনপুট -->
+            <div class="modal-step active" id="step-number-input">
+                <h3>আপনার পেমেন্ট নাম্বার দিন</h3>
+                <p class="modal-subtitle">যে নাম্বারে টাকা গ্রহণ করতে চান</p>
+                <div class="form-group">
+                    <input type="tel" id="payment-number-input" placeholder="e.g., 01700000000">
+                </div>
+                <p id="number-error" class="error-message" style="min-height: 15px;"></p>
+                <button class="action-btn-primary" id="submit-number-btn">পরবর্তী ধাপ</button>
+            </div>
+            
+            <!-- ধাপ ২: মেথড সিলেকশন -->
+            <div class="modal-step" id="step-method-select">
+                <h3>পেমেন্ট মেথড সিলেক্ট করুন</h3>
+                <p class="modal-subtitle">উইথড্র করা হবে: <strong id="display-amount-method"></strong></p>
+                <div class="method-buttons">
+                    <button class="method-btn" data-method="bKash">
+                        <img src="images/bkash-logo.png" alt="bKash"> <span>বিকাশ</span>
+                    </button>
+                    <button class="method-btn" data-method="Nagad">
+                        <img src="images/nagad-logo.png" alt="Nagad"> <span>নগদ</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ধাপ ৩: সফল -->
+            <div class="modal-step" id="step-success">
+                <div class="success-animation">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <h3>অনুরোধ সফল হয়েছে!</h3>
+                <p>আপনার উইথড্র অনুরোধ গ্রহণ করা হয়েছে। ২৪ ঘণ্টার মধ্যে টাকা পাঠানো হবে।</p>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/withdraw.script.js"></script>
+</body>
+</html>

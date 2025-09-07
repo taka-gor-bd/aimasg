@@ -1,0 +1,2005 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ফিড</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+
+<style>
+    :root {
+        --primary-color: #28a745; --secondary-color: #218838; --background-color: #f8f9fa; --card-bg-color: #ffffff;
+        --text-color: #212529; --subtle-text-color: #555555; --white-color: #ffffff; --danger-color: #dc3545; --info-color: #0dcaf0;
+        --success-color: #10b981;
+        --shadow: 0 10px 25px rgba(0, 0, 0, 0.07);
+        --gradient: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+    }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+    /* For optimistic post loading */
+    @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 0.8; } 100% { opacity: 0.5; } }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Noto Sans Bengali', sans-serif; background-color: var(--background-color); color: var(--text-color); padding-top: 70px; padding-bottom: 20px; }
+    
+    /* New Back Button Style */
+    .back-button {
+        position: fixed;
+        top: 15px;
+        left: 15px;
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 8px 15px;
+        background: rgba(255, 255, 255, 0.8);
+        backdrop-filter: blur(12px);
+        border-radius: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+        color: var(--text-color);
+        font-weight: 500;
+        font-size: 14px;
+        text-decoration: none;
+        transition: transform 0.3s ease-in-out;
+    }
+    .back-button.hidden {
+        transform: translateY(-150%);
+    }
+    .back-button i {
+        font-size: 16px;
+        color: var(--primary-color);
+    }
+
+
+    .main-content { padding: 0 15px; }
+    .page-title { font-size: 20px; font-weight: 700; margin-bottom: 20px; color: var(--text-color); }
+    .card { background: var(--card-bg-color); border-radius: 20px; padding: 25px; margin-bottom: 25px; box-shadow: var(--shadow); animation: fadeIn 0.5s ease-out; }
+    
+    /* Feed Post styles - Reused from home.html's latest post, adapted for multiple posts */
+    .post-item {
+        background: var(--card-bg-color);
+        border-radius: 15px;
+        padding: 20px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        margin-bottom: 15px; /* For spacing between posts */
+    }
+    .post-item:last-child {
+        margin-bottom: 0;
+    }
+    /* Style for optimistic/temp post */
+    .optimistic-post {
+        opacity: 0.6;
+        animation: pulse 1.5s infinite;
+        pointer-events: none; /* Make it unclickable while posting */
+    }
+
+    .post-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 15px;
+        position: relative; /* For 3-dot menu positioning */
+    }
+    .post-author-info {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-grow: 1; /* Allow to take space */
+    }
+    .post-author-info img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 1px solid #eee;
+    }
+    .post-author-info .author-details {
+        display: flex;
+        flex-direction: column;
+        flex-grow: 1; /* Allow text to grow */
+    }
+    .post-author {
+        font-weight: 700;
+        font-size: 15px;
+        color: var(--text-color);
+        display: flex; /* To align blue tick and follow button */
+        align-items: center;
+        gap: 5px;
+        line-height: 1; /* Ensure single line for name/badges */
+        flex-wrap: wrap; /* Allow wrapping if items are too wide, but try to keep in one line */
+    }
+    .author-profile-link {
+        text-decoration: none;
+        color: inherit;
+    }
+    .author-profile-link:hover {
+        text-decoration: underline;
+    }
+    .post-blue-tick { /* Blue Tick style */
+        color: #1DA1F2; /* Twitter blue */
+        font-size: 14px;
+        cursor: pointer;
+        flex-shrink: 0; /* Don't shrink */
+    }
+    .post-date {
+        font-size: 12px;
+        color: var(--subtle-text-color);
+        white-space: nowrap; /* Prevent timestamp from wrapping */
+        flex-shrink: 0; /* Don't shrink */
+    }
+    .post-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text-color);
+        margin-bottom: 10px;
+        cursor: pointer; /* Make title clickable to open full post/comments */
+    }
+    .post-message {
+        font-size: 15px;
+        color: var(--subtle-text-color);
+        line-height: 1.6;
+        margin-bottom: 15px;
+        white-space: pre-wrap;
+    }
+    /* See More styles */
+    .post-message.truncated {
+        overflow: hidden;
+        display: -webkit-box;
+        -webkit-line-clamp: 4;
+        -webkit-box-orient: vertical;
+    }
+    .see-more-btn {
+        background: none;
+        border: none;
+        color: var(--primary-color);
+        font-weight: 600;
+        cursor: pointer;
+        padding: 5px 0 0 0;
+        display: block;
+        text-align: left;
+    }
+    .post-image {
+        width: 100%;
+        max-height: 300px; /* Limit image height */
+        object-fit: cover;
+        border-radius: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+        display: block;
+    }
+    .post-link-button {
+        display: block;
+        width: 100%;
+        padding: 10px 15px;
+        border-radius: 10px;
+        background: var(--primary-color);
+        color: var(--white-color);
+        text-align: center;
+        text-decoration: none;
+        font-weight: 600;
+        margin-top: 15px;
+        transition: background-color 0.2s;
+    }
+    .post-link-button:hover {
+        background-color: var(--secondary-color);
+    }
+
+    .post-actions {
+        display: flex;
+        justify-content: space-around;
+        gap: 10px;
+        border-top: 1px solid #f0f0f0;
+        padding-top: 15px;
+        margin-top: 15px;
+    }
+    .post-actions .action-button {
+        background: none;
+        border: none;
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--subtle-text-color);
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        transition: color 0.2s;
+        flex: 1; /* Distribute evenly */
+        justify-content: center;
+    }
+    .post-actions .action-button:hover {
+        color: var(--primary-color);
+    }
+    .post-actions .action-button.liked {
+        color: var(--danger-color); /* Red for liked */
+    }
+    .post-actions .action-button i {
+        font-size: 16px;
+    }
+    .post-views {
+        font-size: 12px;
+        color: var(--subtle-text-color);
+        text-align: right;
+        margin-top: 10px;
+    }
+    
+    /* Updated Boosted Icon Style */
+    .boosted-icon {
+        color: #ffc107; /* Yellowish for boost */
+        font-size: 14px;
+        margin-left: 5px; /* Space from other elements */
+        flex-shrink: 0;
+        /* margin-right: auto; // Remove this to keep it with 3-dot */
+    }
+    /* Hidden until shown */
+    .boosted-icon:empty { display: none; } 
+
+
+    .no-posts-message {
+        text-align: center;
+        color: var(--subtle-text-color);
+        padding: 20px;
+    }
+
+    /* Follow/Unfollow Button - Smaller, Icon-based */
+    .follow-toggle-btn {
+        background: none;
+        border: none;
+        font-size: 13px;
+        font-weight: 600;
+        cursor: pointer;
+        color: var(--primary-color);
+        padding: 4px 8px;
+        border-radius: 6px;
+        transition: background-color 0.2s, color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        margin-left: 8px; /* Space from author name */
+        white-space: nowrap; /* Prevent wrapping */
+        flex-shrink: 0; /* Don't shrink */
+    }
+    .follow-toggle-btn i {
+        font-size: 12px;
+    }
+    .follow-toggle-btn:hover {
+        background-color: #e6f7ed; /* Light green hover */
+    }
+    .follow-toggle-btn.following {
+        color: var(--subtle-text-color);
+        /* background-color: #f0f0f0; */
+    }
+    .follow-toggle-btn.following:hover {
+        background-color: #e0e0e0;
+        color: var(--text-color);
+    }
+
+    /* Floating Action Button (FAB) */
+    .fab-create-post {
+        position: fixed;
+        bottom: 25px; 
+        right: 25px;
+        width: 55px;
+        height: 55px;
+        background: var(--gradient);
+        border-radius: 50%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: var(--white-color);
+        font-size: 28px;
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        z-index: 100;
+        cursor: pointer;
+        transition: transform 0.3s ease-in-out;
+    }
+    .fab-create-post:active {
+        transform: scale(0.95);
+    }
+    .fab-create-post.hidden {
+        transform: translateY(150%);
+    }
+
+    /* Comment Modal (Popup from bottom) */
+    .comment-modal-overlay, .share-options-modal-overlay { /* Share modal now also slides from bottom */
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.6);
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        transform: translateY(100%); /* Start off-screen */
+        transition: transform 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94), opacity 0.3s ease-out; /* Smoother transition */
+        opacity: 0;
+        visibility: hidden;
+        backdrop-filter: blur(5px);
+    }
+    .comment-modal-overlay.active, .share-options-modal-overlay.active {
+        transform: translateY(0); /* Slide up */
+        opacity: 1;
+        visibility: visible;
+    }
+    .comment-modal-content, .share-options-modal-content {
+        background: var(--card-bg-color);
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        padding: 20px 15px;
+        width: 100%;
+        max-height: 80vh; /* Max height for the modal content */
+        display: flex;
+        flex-direction: column;
+        position: relative;
+    }
+    .comment-modal-header, .share-options-modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 15px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #eee;
+    }
+    .comment-modal-header h3, .share-options-modal-header h3 {
+        margin: 0;
+        font-size: 18px;
+        font-weight: 700;
+    }
+    .comment-modal-close-btn, .share-options-modal-close-btn {
+        background: none;
+        border: none;
+        font-size: 24px;
+        color: var(--subtle-text-color);
+        cursor: pointer;
+    }
+    .comments-list-container {
+        flex-grow: 1;
+        overflow-y: auto;
+        margin-bottom: 15px;
+        padding-right: 5px; /* For scrollbar */
+    }
+    .comments-list {
+        list-style: none;
+        padding: 0;
+    }
+    .comment-item {
+        display: flex;
+        align-items: flex-start;
+        margin-bottom: 15px;
+        padding: 10px;
+        background: #f8f9fa;
+        border-radius: 12px;
+    }
+    .comment-item img {
+        width: 35px;
+        height: 35px;
+        border-radius: 50%;
+        margin-right: 10px;
+        object-fit: cover;
+        flex-shrink: 0;
+    }
+    .comment-item .comment-details {
+        flex-grow: 1;
+    }
+    .comment-item .comment-author {
+        font-weight: 700;
+        font-size: 14px;
+        color: var(--text-color);
+        margin-bottom: 2px;
+    }
+    .comment-item .comment-text {
+        font-size: 13px;
+        color: var(--subtle-text-color);
+        line-height: 1.4;
+        white-space: pre-wrap;
+        margin-bottom: 5px;
+    }
+    .comment-item .comment-meta {
+        font-size: 10px;
+        color: #999;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .comment-item .reply-button {
+        background: none;
+        border: none;
+        color: var(--primary-color);
+        font-size: 10px;
+        font-weight: 600;
+        cursor: pointer;
+        padding: 0;
+    }
+    .comment-input-area {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+    .comment-input-area textarea {
+        flex-grow: 1;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 12px;
+        font-family: 'Noto Sans Bengali', sans-serif;
+        font-size: 14px;
+        resize: none;
+        height: 40px; /* Initial height */
+        transition: height 0.2s ease-out;
+        box-sizing: border-box;
+    }
+    .comment-input-area textarea:focus {
+        height: 80px; /* Expand on focus */
+        outline: none;
+        border-color: var(--primary-color);
+    }
+    .comment-input-area button {
+        background: var(--primary-color);
+        color: var(--white-color);
+        border: none;
+        border-radius: 12px;
+        padding: 10px 15px;
+        font-size: 15px;
+        cursor: pointer;
+        flex-shrink: 0;
+        transition: background-color 0.2s;
+    }
+    .comment-input-area button:disabled {
+        background-color: #ccc;
+        cursor: not-allowed;
+    }
+    .no-comments-msg {
+        text-align: center;
+        color: var(--subtle-text-color);
+        padding: 20px;
+    }
+
+
+    /* Common Modal Styles */
+    .modal-overlay { 
+        position: fixed; 
+        inset: 0; 
+        background: rgba(0,0,0,0.6); 
+        z-index: 2000; 
+        display: none; 
+        align-items: center; 
+        justify-content: center; 
+        backdrop-filter: blur(5px); 
+        opacity: 0; 
+        visibility: hidden; 
+        transition: opacity 0.3s ease-out, visibility 0.3s ease-out; 
+    }
+    .modal-overlay.active { 
+        display: flex; 
+        opacity: 1; 
+        visibility: visible; 
+    }
+    .modal-content { background: var(--white-color); padding: 30px; border-radius: 20px; text-align: center; max-width: 350px; width: 90%; box-shadow: 0 10px 30px rgba(0,0,0,0.2); position: relative; }
+    .modal-close-btn { position: absolute; top: 10px; right: 15px; font-size: 24px; color: #9ca3af; background: none; border: none; cursor: pointer; }
+    .modal-btn { width: 100%; background: var(--gradient); color: var(--white-color); border: none; padding: 12px; border-radius: 10px; font-size: 16px; font-weight: 700; cursor: pointer; }
+    
+    #alert-modal .modal-content { text-align: center; }
+    #alert-icon { font-size: 48px; margin-bottom: 15px; }
+    #alert-icon.success { color: var(--success-color); }
+    #alert-icon.error { color: var(--danger-color); }
+    #alert-icon.info { color: var(--info-color); }
+    #alert-title { font-size: 22px; margin-bottom: 10px; }
+    #alert-message { color: var(--subtle-text-color); line-height: 1.6; }
+    .modal-actions { margin-top: 20px; }
+    
+    /* Post Creation/Edit Modal Specific Styles */
+    #create-post-modal .modal-content, #edit-post-modal .modal-content {
+        max-width: 420px;
+        text-align: left;
+    }
+    .form-group {
+        margin-bottom: 15px;
+    }
+    .form-group label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 5px;
+        color: var(--text-color);
+    }
+    .form-group input[type="text"],
+    .form-group textarea,
+    .form-group input[type="number"] {
+        width: 100%;
+        padding: 10px 12px;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        font-family: 'Noto Sans Bengali', sans-serif;
+        font-size: 15px;
+        box-sizing: border-box;
+    }
+    .form-group textarea {
+        min-height: 80px;
+        resize: vertical;
+    }
+    .checkbox-group {
+        display: flex;
+        align-items: center;
+        margin-bottom: 15px;
+    }
+    .checkbox-group input[type="checkbox"] {
+        margin-right: 10px;
+        width: 20px;
+        height: 20px;
+    }
+    .boost-details {
+        background-color: #f8f9fa;
+        border: 1px solid #eee;
+        border-radius: 10px;
+        padding: 15px;
+        margin-top: 15px;
+    }
+    .boost-details p {
+        font-size: 14px;
+        margin-bottom: 5px;
+        color: var(--subtle-text-color);
+    }
+    .boost-details strong {
+        color: var(--primary-color);
+    }
+
+    /* 3-dot menu for post actions */
+    .post-options-menu {
+        position: absolute;
+        top: 40px; /* Adjust as needed */
+        right: 10px;
+        background: var(--white-color);
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        z-index: 10;
+        display: none;
+        flex-direction: column;
+        overflow: hidden;
+        min-width: 150px; /* Ensure buttons are not too small */
+    }
+    .post-options-menu.active {
+        display: flex;
+    }
+    .post-options-menu button {
+        background: none;
+        border: none;
+        padding: 10px 15px;
+        text-align: left;
+        font-size: 15px;
+        color: var(--text-color);
+        cursor: pointer;
+        transition: background-color 0.2s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    .post-options-menu button:hover {
+        background-color: #f0f0f0;
+    }
+    .post-options-menu button:first-child { border-top-left-radius: 10px; border-top-right-radius: 10px; }
+    .post-options-menu button:last-child { border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; }
+    .post-options-menu button i {
+        margin-right: 8px; /* Already there, but emphasize */
+    }
+
+
+    /* Subscription Promo Modal */
+    #subscription-promo-modal .modal-content {
+        background: linear-gradient(135deg, #0dcaf0, #0a8fbb); /* Info blue gradient */
+        color: var(--white-color);
+    }
+    #subscription-promo-modal h3 {
+        font-size: 24px;
+        margin-bottom: 10px;
+    }
+    #subscription-promo-modal p {
+        opacity: 0.9;
+    }
+    #subscription-promo-modal .modal-btn {
+        background: var(--white-color);
+        color: #0dcaf0; /* Info blue */
+    }
+
+    /* Pull-to-refresh spinner */
+    .pull-to-refresh-spinner {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 40px;
+        margin-top: -40px; /* Hide initially above view */
+        transition: margin-top 0.3s ease-out, opacity 0.3s ease-out;
+        color: var(--primary-color);
+        opacity: 0;
+        visibility: hidden;
+    }
+    .pull-to-refresh-spinner.visible {
+        margin-top: 10px; /* Show when visible */
+        opacity: 1;
+        visibility: visible;
+    }
+    .pull-to-refresh-spinner i {
+        animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+
+    /* Share Options Modal Specific Styles */
+    .share-options-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        text-align: left;
+    }
+    .share-options-list li {
+        margin-bottom: 10px;
+    }
+    .share-options-list button {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        width: 100%;
+        padding: 12px 15px;
+        background: #f8f9fa;
+        border: none;
+        border-radius: 10px;
+        font-size: 16px;
+        color: var(--text-color);
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+    .share-options-list button:hover {
+        background-color: #e9ecef;
+    }
+    .share-options-list button i {
+        font-size: 20px;
+        color: var(--primary-color); /* Default icon color */
+    }
+    .share-options-list button .fa-telegram-plane { color: #0088cc; }
+    .share-options-list button .fa-whatsapp { color: #25d366; }
+    .share-options-list button .fa-copy { color: #6c757d; }
+    .share-options-list button .fa-flag { color: var(--danger-color); }
+    .share-options-list button .fa-share-alt { color: var(--info-color); }
+
+</style>
+</head>
+<body>
+
+<!-- New Back Button -->
+<a href="updates.html" class="back-button" id="back-button">
+    <i class="fas fa-arrow-left"></i>
+    <span>আগের পেজে ফিরে যান</span>
+</a>
+
+
+<main class="main-content">
+    <div class="pull-to-refresh-spinner" id="pull-to-refresh-spinner">
+        <i class="fas fa-sync-alt"></i>
+    </div>
+
+    <div id="posts-container">
+        <p class="no-posts-message" id="initial-loading-message">পোস্ট লোড হচ্ছে...</p>
+    </div>
+    <p class="no-posts-message" id="no-more-posts-message" style="display:none;">আর কোনো পোস্ট নেই।</p>
+    <div class="loading-more-spinner" id="loading-more-spinner" style="display:none; text-align:center; padding: 15px;"><i class="fas fa-circle-notch fa-spin"></i> আরও পোস্ট লোড হচ্ছে...</div>
+
+</main>
+
+<!-- FAB for Create Post -->
+<button class="fab-create-post" id="fab-create-post">
+    <i class="fas fa-plus"></i>
+</button>
+
+<!-- Post Creation/Edit Modal -->
+<div class="modal-overlay" id="create-post-modal">
+    <div class="modal-content">
+        <button class="modal-close-btn" id="close-create-post-modal">&times;</button>
+        <h3 style="text-align:center; margin-bottom: 20px;" id="post-modal-title">নতুন পোস্ট তৈরি করুন</h3>
+        <div class="form-group">
+            <label for="post-title-input">পোস্টের শিরোনাম</label>
+            <input type="text" id="post-title-input" placeholder="একটি আকর্ষণীয় শিরোনাম দিন" required>
+        </div>
+        <div class="form-group">
+            <label for="post-message-input">পোস্টের বিবরণ</label>
+            <textarea id="post-message-input" placeholder="আপনার পোস্টের বিস্তারিত লিখুন..." required></textarea>
+        </div>
+        <div class="form-group">
+            <label for="post-image-url-input">ছবির URL (ঐচ্ছিক)</label>
+            <input type="text" id="post-image-url-input" placeholder="ছবির লিঙ্ক দিন (যেমন: https://example.com/image.jpg)">
+        </div>
+
+        <!-- Premium/Subscription Link & Button Fields -->
+        <div id="premium-post-options" style="display: none;">
+            <div class="form-group">
+                <label for="post-link-url-input">লিঙ্কের URL (ঐচ্ছিক)</label>
+                <input type="text" id="post-link-url-input" placeholder="যোগদান বাটন এর লিঙ্ক দিন">
+            </div>
+            <div class="form-group">
+                <label for="post-button-text-input">বাটনের লেখা (ঐচ্ছিক)</label>
+                <input type="text" id="post-button-text-input" placeholder="যেমন: জয়েন করুন">
+            </div>
+        </div>
+
+        <!-- Boost Post Option -->
+        <div class="checkbox-group" style="margin-top: 20px;">
+            <input type="checkbox" id="boost-post-checkbox">
+            <label for="boost-post-checkbox">পোস্ট বুস্ট করুন</label>
+        </div>
+        <div id="boost-post-section" style="display: none;">
+            <div class="form-group">
+                <label for="boost-amount-input">বুস্ট পরিমাণ (টাকা)</label>
+                <input type="number" id="boost-amount-input" min="10" value="10" required>
+            </div>
+            <div class="boost-details">
+                <p>আনুমানিক রিচ: <strong id="estimated-reach">৫০-১০০ জন</strong></p>
+                <p>আনুমানিক লাইক: <strong id="estimated-likes">৫-১০টি</strong></p>
+                <p>আনুমানিক কমেন্ট: <strong id="estimated-comments">২-৫টি</strong></p>
+            </div>
+        </div>
+
+        <div class="modal-actions">
+            <button class="modal-btn" id="submit-post-btn">পোস্ট করুন</button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Comment Modal -->
+<div class="comment-modal-overlay" id="comment-modal">
+    <div class="comment-modal-content">
+        <div class="comment-modal-header">
+            <h3>কমেন্টস</h3>
+            <button class="comment-modal-close-btn" id="close-comment-modal">&times;</button>
+        </div>
+        <div class="comments-list-container">
+            <ul class="comments-list" id="comments-list">
+                <!-- Comments will be loaded here -->
+            </ul>
+            <p class="no-comments-msg" id="no-comments-msg" style="display:none;">কোনো কমেন্ট নেই।</p>
+        </div>
+        <div class="comment-input-area">
+            <textarea id="comment-input" placeholder="আপনার কমেন্ট লিখুন..." rows="1"></textarea>
+            <button id="send-comment-btn" disabled><i class="fas fa-paper-plane"></i></button>
+        </div>
+    </div>
+</div>
+
+<!-- Share Options Modal -->
+<div class="share-options-modal-overlay" id="share-options-modal">
+    <div class="share-options-modal-content">
+        <div class="share-options-modal-header">
+            <h3>শেয়ার অপশন</h3>
+            <button class="share-options-modal-close-btn" id="close-share-options-modal">&times;</button>
+        </div>
+        <ul class="share-options-list" id="dynamic-share-options-list">
+            <!-- Share options will be dynamically loaded here -->
+        </ul>
+    </div>
+</div>
+
+<!-- 3-dot Post Options Menu -->
+<div class="modal-overlay" id="post-options-overlay" style="background: transparent; visibility: hidden; opacity: 0; display: none;">
+    <div class="post-options-menu" id="post-options-menu">
+        <!-- Options dynamically loaded based on post ownership -->
+    </div>
+</div>
+
+<!-- Subscription Promo Modal -->
+<div class="modal-overlay" id="subscription-promo-modal">
+    <div class="modal-content">
+        <button class="modal-close-btn" id="close-subscription-promo-modal">&times;</button>
+        <div style="font-size: 48px;"><i class="fas fa-star"></i></div>
+        <h3>সাবস্ক্রিপশন মেম্বার হোন!</h3>
+        <p>এই ইউজার একজন সাবস্ক্রিপশন মেম্বার। আপনিও ব্লু টিক পেতে এবং প্রিমিয়াম ফিচার ব্যবহার করতে সাবস্ক্রিপশন নিন।</p>
+        <div class="modal-actions" style="margin-top: 20px;"><button class="modal-btn" id="go-to-plan-btn">প্ল্যান পেজে যান</button></div>
+    </div>
+</div>
+
+
+<!-- Alert Modal (for general alerts) -->
+<div class="modal-overlay" id="alert-modal">
+    <div class="modal-content">
+        <div id="alert-icon"></div>
+        <h3 id="alert-title"></h3>
+        <p id="alert-message"></p>
+        <div class="modal-actions">
+            <button class="modal-btn" id="close-alert-btn">ঠিক আছে</button>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+
+<script>
+    const firebaseConfig = {
+        apiKey: "AIzaSyCwtr07rzsBp6yLilCh4EEIl2YDAELYmKM",
+        authDomain: "personal-message-f2930.firebaseapp.com",
+        databaseURL: "https://personal-message-f2930-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "personal-message-f2930",
+        storageBucket: "personal-message-f2930.appspot.com",
+        messagingSenderId: "883994486321",
+        appId: "1:883994486321:web:e527a093dd64fdecb31710",
+    };
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+    const database = firebase.database();
+    
+    let currentUserData = null; // Store user data for header display and commenting
+    let currentPostIdForComments = null; // To track which post's comments are being viewed
+    let currentEditingPostId = null; // To track which post is being edited
+    let currentPostForShare = null; // To track which post is being shared/reported
+
+    // Infinite Scroll & Pull-to-Refresh variables
+    let lastFetchedPostTimestamp = null; // Timestamp of the oldest post currently displayed
+    const POSTS_PER_LOAD = 10;
+    let isLoadingPosts = false;
+    let allPostsLoaded = false;
+    let isPullingToRefresh = false;
+
+    // --- Caching variables ---
+    let postsCache = {}; // Object to store posts by ID for quick access and updates
+    const renderedPostElements = new Map(); // Map<postId, DOM_Element> to manage actual DOM elements
+
+    // --- Utility Function: Throttle ---
+    function throttle(func, limit) {
+        let inThrottle;
+        return function() {
+            const args = arguments;
+            const context = this;
+            if (!inThrottle) {
+                func.apply(context, args);
+                inThrottle = true;
+                setTimeout(() => (inThrottle = false), limit);
+            }
+        };
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeStaticUI();
+        setupFloatingButtonScrolls(); // UPDATED: Handles both back button and FAB
+        auth.onAuthStateChanged(user => {
+            if (user) {
+                // Load cached user data for quick display
+                const cachedData = localStorage.getItem('user_data_' + user.uid);
+                if (cachedData) {
+                    currentUserData = JSON.parse(cachedData);
+                    // No header to render, but data is needed
+                }
+                // Fetch live user data and posts
+                fetchAndListenUserData(user);
+                
+                // Initial load of posts from cache then setup real-time listener
+                loadPostsFromCache(); 
+                setupRealtimePostsListener(user); 
+
+                // Check for URL parameters to open a specific post's comments/share
+                const params = new URLSearchParams(window.location.search);
+                const postId = params.get('postId');
+                const action = params.get('action');
+                if (postId) {
+                    // Delay opening the modal slightly to ensure posts are loaded
+                    setTimeout(() => {
+                        if (action === 'comment') {
+                            openCommentModal(postId);
+                        } else if (action === 'share') {
+                            // For share action, open create-post-modal pre-filled
+                            database.ref(`posts/${postId}`).once('value').then(snapshot => {
+                                const postToShare = snapshot.val();
+                                if(postToShare) {
+                                    openCreatePostModal('share', postId, postToShare.title, postToShare.message, postToShare.imageUrl);
+                                } else {
+                                    showAlert('ত্রুটি', 'শেয়ার করার জন্য পোস্টটি পাওয়া যায়নি।', 'error');
+                                }
+                            });
+                        }
+                    }, 1000); 
+                    // Remove URL params after action to prevent re-triggering on refresh
+                    history.replaceState({}, document.title, window.location.pathname);
+                }
+
+                // Setup infinite scroll
+                window.addEventListener('scroll', throttle(handleInfiniteScroll, 200)); // Throttled scroll event
+                // Setup pull-to-refresh
+                setupPullToRefresh();
+
+            } else {
+                window.location.replace('index.html');
+            }
+        });
+    });
+    
+    // UPDATED: Floating buttons scroll behavior
+    function setupFloatingButtonScrolls() {
+        const backButton = document.getElementById('back-button');
+        const fab = document.getElementById('fab-create-post');
+        if (!backButton || !fab) return;
+        
+        let lastScrollY = window.scrollY;
+
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > lastScrollY && window.scrollY > 50) {
+                // Scrolling down
+                backButton.classList.add('hidden');
+                fab.classList.add('hidden');
+            } else {
+                // Scrolling up or at the top
+                backButton.classList.remove('hidden');
+                fab.classList.remove('hidden');
+            }
+            lastScrollY = window.scrollY;
+        });
+    }
+
+    function fetchAndListenUserData(user) {
+        const userRef = database.ref('users/' + user.uid);
+        userRef.on('value', (snapshot) => {
+            const data = snapshot.val();
+            if (data) {
+                currentUserData = data; // Update global user data
+                localStorage.setItem('user_data_' + user.uid, JSON.stringify(data)); // Cache updated data
+
+                // Show/hide premium post options based on subscription status
+                const premiumPostOptions = document.getElementById('premium-post-options');
+                if (premiumPostOptions) {
+                    premiumPostOptions.style.display = data.isSubscriptionUser ? 'block' : 'none';
+                }
+                // Re-render posts to update follow buttons if user's following status changed
+                renderPostsFromCache();
+            }
+        });
+    }
+
+    // --- Caching & Intelligent DOM Update Logic ---
+    function loadPostsFromCache() {
+        const postsContainer = document.getElementById('posts-container');
+        const initialLoadingMessage = document.getElementById('initial-loading-message');
+
+        const cachedPostsData = localStorage.getItem('cached_feed_posts');
+        if (cachedPostsData) {
+            postsCache = JSON.parse(cachedPostsData);
+            renderPostsFromCache(); // Render cached posts immediately
+            initialLoadingMessage.style.display = 'none';
+        } else {
+            initialLoadingMessage.style.display = 'block';
+        }
+    }
+
+    function setupRealtimePostsListener(user) {
+        // Detach any existing listeners to prevent duplicates
+        database.ref('posts').off();
+
+        // First, load initial set of latest posts and set up infinite scroll point
+        database.ref('posts').orderByChild('timestamp').limitToLast(POSTS_PER_LOAD).once('value', snapshot => {
+            snapshot.forEach(childSnapshot => {
+                const post = { id: childSnapshot.key, ...childSnapshot.val() };
+                postsCache[post.id] = post;
+            });
+            renderPostsFromCache(); // Initial render of latest posts
+            // Set lastFetchedPostTimestamp to the timestamp of the oldest post currently in cache
+            const sortedCache = Object.values(postsCache).sort((a, b) => a.timestamp - b.timestamp);
+            if (sortedCache.length > 0) {
+                lastFetchedPostTimestamp = sortedCache[0].timestamp; // Oldest post in the initial load
+            } else {
+                allPostsLoaded = true;
+            }
+            localStorage.setItem('cached_feed_posts', JSON.stringify(postsCache));
+            document.getElementById('initial-loading-message').style.display = 'none';
+        }).then(() => {
+            // Now, set up a continuous listener for any changes (added, changed, removed)
+            // This will keep the `postsCache` up-to-date in real-time
+            database.ref('posts').on('child_added', (snapshot) => {
+                const post = { id: snapshot.key, ...snapshot.val() };
+                if (!postsCache[post.id]) { // Only add if truly new to cache
+                    postsCache[post.id] = post;
+                    renderPostsFromCache();
+                    localStorage.setItem('cached_feed_posts', JSON.stringify(postsCache));
+                    document.getElementById('no-more-posts-message').style.display = 'none';
+                }
+            });
+
+            database.ref('posts').on('child_changed', (snapshot) => {
+                const post = { id: snapshot.key, ...snapshot.val() };
+                if (postsCache[post.id]) { // Only update if existing in cache
+                    postsCache[post.id] = post;
+                    renderPostsFromCache();
+                    localStorage.setItem('cached_feed_posts', JSON.stringify(postsCache));
+                }
+            });
+
+            database.ref('posts').on('child_removed', (snapshot) => {
+                const postId = snapshot.key;
+                if (postsCache[postId]) {
+                    delete postsCache[postId];
+                    renderPostsFromCache();
+                    localStorage.setItem('cached_feed_posts', JSON.stringify(postsCache));
+                }
+            });
+        });
+    }
+
+
+    // Main rendering function that intelligently updates the DOM
+    async function renderPostsFromCache() {
+        const user = auth.currentUser;
+        if (!user || !currentUserData) return; // Must have current user data
+        
+        const postsContainer = document.getElementById('posts-container');
+        const noMorePostsMessage = document.getElementById('no-more-posts-message');
+
+        const sortedPosts = Object.values(postsCache).sort((a, b) => b.timestamp - a.timestamp); // Always sort for display
+
+        if (sortedPosts.length === 0) {
+            postsContainer.innerHTML = '<p class="no-posts-message">কোনো পোস্ট পাওয়া যায়নি।</p>';
+            noMorePostsMessage.style.display = 'none'; // Hide if no posts at all
+            return;
+        } else {
+            // Remove "no posts found" message if it was there
+            const noPostsFoundMsg = postsContainer.querySelector('.no-posts-message');
+            if (noPostsFoundMsg && noPostsFoundMsg.textContent === 'কোনো পোস্ট পাওয়া যায়নি।') {
+                noPostsFoundMsg.remove();
+            }
+        }
+
+
+        // 1. Remove posts from DOM that are no longer in cache
+        Array.from(postsContainer.children).forEach(element => {
+            const postId = element.dataset.postId;
+            if (postId && !postsCache[postId] && !postId.startsWith('temp-')) { // Don't remove optimistic temp posts here
+                element.remove();
+                renderedPostElements.delete(postId);
+            }
+        });
+
+        // 2. Add new posts or update existing ones in correct order
+        for (const post of sortedPosts) {
+            let postElement = renderedPostElements.get(post.id);
+
+            if (postElement) {
+                // Post exists in DOM, update its content (e.g., likes, comments, views)
+                await updatePostElementContent(postElement, post, user);
+            } else {
+                // New post, create element and add to DOM
+                postElement = document.createElement('div');
+                postElement.className = 'post-item';
+                postElement.dataset.postId = post.id;
+                
+                await updatePostElementContent(postElement, post, user); // Populate initial content
+                
+                // Find the correct position to insert the new post
+                let inserted = false;
+                const existingElements = Array.from(postsContainer.children);
+                for (const existingChild of existingElements) {
+                    const childPostId = existingChild.dataset.postId;
+                    if (childPostId && postsCache[childPostId] && postsCache[childPostId].timestamp < post.timestamp) {
+                        postsContainer.insertBefore(postElement, existingChild);
+                        inserted = true;
+                        break;
+                    }
+                }
+                if (!inserted) {
+                    postsContainer.appendChild(postElement); // Append if it's the oldest or only one
+                }
+                renderedPostElements.set(post.id, postElement);
+            }
+        }
+        
+        // Hide initial loading message once content is rendered
+        document.getElementById('initial-loading-message').style.display = 'none';
+    }
+
+    // Helper to update parts of an existing post DOM element
+    async function updatePostElementContent(postElement, post, user) {
+        let authorName = post.authorName || 'Unknown User';
+        let authorAvatarUrl = post.authorAvatarUrl || `https://api.dicebear.com/9.x/initials/svg?seed=${authorName.charAt(0)}`;
+        let isAuthorSubscriptionUser = post.isAuthorSubscriptionUser || false;
+
+        // Check if current user is following this author
+        const isFollowing = currentUserData && currentUserData.following && currentUserData.following[post.authorUid];
+
+        // Formatting date
+        const postDate = new Date(post.timestamp).toLocaleDateString('bn-BD', { day: 'numeric', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+
+        const userLikedSnapshot = await database.ref(`postLikes/${post.id}/${user.uid}`).once('value');
+        const isLiked = userLikedSnapshot.exists() && userLikedSnapshot.val() === true;
+        
+        // UPDATED: Generate HTML for follow button with English text
+        let followButtonHtml = '';
+        if (user.uid !== post.authorUid) {
+            followButtonHtml = `
+                <button class="follow-toggle-btn ${isFollowing ? 'following' : ''}" data-author-uid="${post.authorUid}" data-is-following="${isFollowing}">
+                    <i class="fas fa-${isFollowing ? 'check' : 'user-plus'}"></i> ${isFollowing ? 'Following' : 'Follow'}
+                </button>
+            `;
+        }
+        
+        // UPDATED: Wrap author name in a link
+        const authorLink = `<a href="profile.html?uid=${post.authorUid}" class="author-profile-link">${authorName}</a>`;
+        
+        const currentHTML = postElement.innerHTML;
+        const newHTML = `
+            <div class="post-header">
+                <div class="post-author-info">
+                    <img src="${authorAvatarUrl}" alt="Author">
+                    <div class="author-details">
+                        <span class="post-author" id="post-author-${post.id}">${authorLink}
+                            ${isAuthorSubscriptionUser ? `<i class="fas fa-check-circle post-blue-tick" data-author-uid="${post.authorUid}" title="সাবস্ক্রিপশন মেম্বার"></i>` : ''}
+                            ${followButtonHtml}
+                        </span>
+                        <span class="post-date">${postDate}</span>
+                    </div>
+                </div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    ${post.isBoosted ? `<i class="fas fa-bolt boosted-icon" title="বুস্টেড পোস্ট"></i>` : ''}
+                    ${user.uid === post.authorUid ? `<button class="post-options-toggle" data-post-id="${post.id}" style="background: none; border: none; font-size: 18px; color: var(--subtle-text-color); cursor: pointer;"><i class="fas fa-ellipsis-v"></i></button>` : ''}
+                    ${user.uid !== post.authorUid ? `<button class="post-options-toggle" data-post-id="${post.id}" style="background: none; border: none; font-size: 18px; color: var(--subtle-text-color); cursor: pointer;"><i class="fas fa-ellipsis-v"></i></button>` : ''}
+                </div>
+            </div>
+            <h3 class="post-title" data-post-id="${post.id}">${post.title}</h3>
+            <p class="post-message">${post.message}</p>
+            ${post.imageUrl && post.imageUrl !== 'N/A' ? `<img src="${post.imageUrl}" alt="Post Image" class="post-image">` : ''}
+            ${post.linkUrl && post.linkUrl !== 'N/A' && post.buttonText && post.buttonText !== 'N/A' ? `<a href="${post.linkUrl}" target="_blank" class="post-link-button"><i class="fas fa-external-link-alt"></i> ${post.buttonText}</a>` : ''}
+            <div class="post-actions">
+                <button class="action-button like-button ${isLiked ? 'liked' : ''}" data-post-id="${post.id}" data-liked="${isLiked}">
+                    <i class="fas fa-heart"></i>
+                    <span>${post.likesCount || 0}</span>
+                </button>
+                <button class="action-button comment-button" data-post-id="${post.id}">
+                    <i class="fas fa-comment"></i>
+                    <span>${post.commentsCount || 0}</span>
+                </button>
+                <button class="action-button share-button" data-post-id="${post.id}">
+                    <i class="fas fa-share-alt"></i>
+                    <span>${post.sharesCount || 0}</span>
+                </button>
+            </div>
+            <div class="post-views">
+                <i class="fas fa-eye"></i> <span id="views-count-${post.id}">${post.viewsCount || 0}</span> ভিউ
+            </div>
+        `;
+
+        if (currentHTML !== newHTML) {
+            postElement.innerHTML = newHTML;
+        }
+
+        // Re-attach listeners after content update
+        attachPostEventListenersToElement(postElement, post, user);
+        // ADDED: Setup "See More" functionality for the post
+        setupSeeMoreForPost(postElement);
+    }
+    
+    // NEW: Function to handle post truncation
+    function setupSeeMoreForPost(postElement) {
+        const messageElement = postElement.querySelector('.post-message');
+        if (!messageElement) return;
+
+        const MAX_LINES = 4;
+        const lineHeight = parseFloat(window.getComputedStyle(messageElement).lineHeight);
+        const maxHeight = MAX_LINES * lineHeight;
+
+        // Check if the content is taller than the max height for 4 lines
+        if (messageElement.scrollHeight > maxHeight + 5) { // Add a small buffer
+            messageElement.classList.add('truncated');
+            
+            let seeMoreBtn = postElement.querySelector('.see-more-btn');
+            if (!seeMoreBtn) {
+                seeMoreBtn = document.createElement('button');
+                seeMoreBtn.className = 'see-more-btn';
+                seeMoreBtn.textContent = '... আরও দেখুন';
+                messageElement.after(seeMoreBtn); 
+                
+                seeMoreBtn.addEventListener('click', () => {
+                    messageElement.classList.remove('truncated');
+                    seeMoreBtn.style.display = 'none';
+                }, { once: true });
+            } else {
+                 seeMoreBtn.style.display = 'block';
+            }
+        } else {
+             // If post is short, ensure no button is shown
+             let seeMoreBtn = postElement.querySelector('.see-more-btn');
+             if(seeMoreBtn) seeMoreBtn.style.display = 'none';
+        }
+    }
+
+
+    // Function to attach all event listeners for a single post element
+    function attachPostEventListenersToElement(postElement, post, user) {
+        // Detach existing listeners to prevent duplicates before attaching new ones
+        const cloneAndReplace = (selector) => {
+            const oldElem = postElement.querySelector(selector);
+            if (oldElem) {
+                const newElem = oldElem.cloneNode(true);
+                oldElem.parentNode.replaceChild(newElem, oldElem);
+                return newElem;
+            }
+            return null;
+        };
+
+        const likeButton = cloneAndReplace('.like-button');
+        const commentButton = cloneAndReplace('.comment-button');
+        const postTitle = cloneAndReplace('.post-title');
+        const shareButton = cloneAndReplace('.share-button');
+        const blueTickElement = cloneAndReplace('.post-blue-tick');
+        const postOptionsToggle = cloneAndReplace('.post-options-toggle');
+        const followButton = cloneAndReplace('.follow-toggle-btn');
+        
+
+        // Attach new listeners
+        likeButton?.addEventListener('click', (e) => handlePostLike(e.currentTarget, user.uid));
+        commentButton?.addEventListener('click', (e) => openCommentModal(e.currentTarget.dataset.postId));
+        postTitle?.addEventListener('click', (e) => openCommentModal(e.currentTarget.dataset.postId));
+        shareButton?.addEventListener('click', (e) => handleSharePost(post, user.uid));
+        
+        blueTickElement?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openSubscriptionPromoModal();
+        });
+
+        postOptionsToggle?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            openPostOptionsMenu(e.currentTarget, post); // Pass full post object for options
+        });
+
+        followButton?.addEventListener('click', (e) => {
+            e.stopPropagation();
+            handleFollowToggle(e.currentTarget, user.uid);
+        });
+    }
+    
+    // --- Infinite Scroll Logic ---
+    async function fetchMorePostsFromFirebase(user) {
+        if (isLoadingPosts || allPostsLoaded || !user) {
+            return;
+        }
+        isLoadingPosts = true;
+        document.getElementById('loading-more-spinner').style.display = 'block';
+
+        try {
+            let query = database.ref('posts').orderByChild('timestamp');
+            if (lastFetchedPostTimestamp) {
+                // Fetch posts older than the oldest one currently displayed
+                query = query.endBefore(lastFetchedPostTimestamp); 
+            }
+            query = query.limitToLast(POSTS_PER_LOAD);
+
+            const snapshot = await query.once('value');
+            const fetchedPosts = [];
+            snapshot.forEach(childSnapshot => {
+                fetchedPosts.push({ id: childSnapshot.key, ...childSnapshot.val() });
+            });
+
+            if (fetchedPosts.length > 0) {
+                // Sort to find the oldest timestamp for the next fetch
+                const sortedFetched = fetchedPosts.sort((a,b) => a.timestamp - b.timestamp);
+                lastFetchedPostTimestamp = sortedFetched[0].timestamp;
+
+                sortedFetched.forEach(post => {
+                    postsCache[post.id] = post;
+                });
+                renderPostsFromCache(); // Re-render to include new older posts
+                if (fetchedPosts.length < POSTS_PER_LOAD) {
+                    allPostsLoaded = true;
+                    document.getElementById('no-more-posts-message').style.display = 'block';
+                } else {
+                    document.getElementById('no-more-posts-message').style.display = 'none';
+                }
+            } else {
+                allPostsLoaded = true;
+                document.getElementById('no-more-posts-message').style.display = 'block';
+            }
+        } catch (error) {
+            console.error("Error fetching more posts:", error);
+            showAlert('ত্রুটি', 'আরও পোস্ট লোড করতে সমস্যা হয়েছে।', 'error');
+        } finally {
+            isLoadingPosts = false;
+            document.getElementById('loading-more-spinner').style.display = 'none';
+        }
+    }
+
+    function handleInfiniteScroll() {
+        if (isLoadingPosts || allPostsLoaded) {
+            return;
+        }
+        const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
+        if (scrollTop + clientHeight >= scrollHeight - 100) { // 100px from bottom
+            fetchMorePostsFromFirebase(auth.currentUser);
+        }
+    }
+
+    // --- Pull-to-Refresh Logic ---
+    let touchstartY = 0;
+    let touchendY = 0;
+    const pullThreshold = 80; // Pixels to pull down to trigger refresh
+
+    function checkDirection() {
+        if (touchendY > touchstartY + pullThreshold) { // Swiping down enough
+            if (window.scrollY === 0 && !isLoadingPosts && !isPullingToRefresh) {
+                isPullingToRefresh = true;
+                document.getElementById('pull-to-refresh-spinner').classList.add('visible');
+                // Reset state for a full refresh
+                postsCache = {}; 
+                renderedPostElements.clear(); // Clear the map of rendered elements
+                lastFetchedPostTimestamp = null;
+                allPostsLoaded = false;
+                document.getElementById('posts-container').innerHTML = ''; // Clear container for fresh load
+                document.getElementById('no-more-posts-message').style.display = 'none'; // Hide "No more posts"
+                document.getElementById('initial-loading-message').style.display = 'block'; // Show initial loading
+                
+                // Fetch initial batch again, which will then trigger listener setup again
+                setupRealtimePostsListener(auth.currentUser); // Re-initialize listener, which re-fetches
+                
+                // Hide spinner after a delay
+                setTimeout(() => {
+                    document.getElementById('pull-to-refresh-spinner').classList.remove('visible');
+                    isPullingToRefresh = false;
+                }, 1500);
+            }
+        }
+    }
+
+    function setupPullToRefresh() {
+        document.body.addEventListener('touchstart', e => {
+            touchstartY = e.changedTouches[0].screenY;
+        });
+
+        document.body.addEventListener('touchend', e => {
+            touchendY = e.changedTouches[0].screenY;
+            checkDirection();
+        });
+    }
+
+    // NEW: Function to handle follow/unfollow with new UX
+    async function handleFollowToggle(button, currentUserId) {
+        const authorUid = button.dataset.authorUid;
+        const isCurrentlyFollowing = button.dataset.isFollowing === 'true';
+
+        if (isCurrentlyFollowing) {
+            // Unfollowing is not handled from this button as per request.
+            // A user would have to go to the profile.
+            // If you want to enable unfollow, the logic would go here.
+            return; 
+        }
+
+        // Optimistic UI update
+        button.disabled = true; // Prevent double clicks
+        button.innerHTML = `<i class="fas fa-check"></i> Following`;
+        button.classList.add('following');
+        button.dataset.isFollowing = 'true';
+        
+        // Disappear after a delay
+        setTimeout(() => {
+            button.style.display = 'none';
+        }, 2500);
+
+
+        // Database logic
+        const currentUserFollowingRef = database.ref(`users/${currentUserId}/following/${authorUid}`);
+        const authorFollowersRef = database.ref(`users/${authorUid}/followers/${currentUserId}`);
+        
+        try {
+            // Follow logic
+            await currentUserFollowingRef.set(true);
+            await authorFollowersRef.set(true);
+            // The real-time listener will eventually refresh the post state correctly.
+        } catch (error) {
+            console.error("Error toggling follow:", error);
+            // Revert UI on error
+             button.innerHTML = `<i class="fas fa-user-plus"></i> Follow`;
+             button.classList.remove('following');
+             button.dataset.isFollowing = 'false';
+             button.style.display = 'flex'; // show it again
+             button.disabled = false;
+            showAlert('ব্যর্থ', 'অনুসরণ করতে সমস্যা হয়েছে।', 'error');
+        }
+    }
+
+
+    async function handlePostLike(button, userId) {
+        const postId = button.dataset.postId;
+        const isLiked = button.dataset.liked === 'true';
+        const postLikesRef = database.ref(`postLikes/${postId}/${userId}`);
+        const postRef = database.ref(`posts/${postId}`);
+        // No showAlert here, UI feedback is button state and count change
+        
+        try {
+            if (isLiked) {
+                await postLikesRef.remove();
+                await postRef.child('likesCount').transaction((currentLikes) => (currentLikes || 0) - 1);
+                // UI will update via real-time listener
+            } else {
+                await postLikesRef.set(true);
+                await postRef.child('likesCount').transaction((currentLikes) => (currentLikes || 0) + 1);
+                // UI will update via real-time listener
+            }
+        } catch (error) {
+            console.error("Error liking/unliking post:", error);
+            showAlert('ব্যর্থ', 'লাইক করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', 'error');
+        }
+    }
+
+    // --- Share & Report Modal Logic ---
+    const shareOptionsModal = document.getElementById('share-options-modal');
+    const closeShareOptionsModalBtn = document.getElementById('close-share-options-modal');
+    const dynamicShareOptionsList = document.getElementById('dynamic-share-options-list');
+
+    closeShareOptionsModalBtn.addEventListener('click', closeShareOptionsModal);
+
+    function openShareOptionsModal() {
+        shareOptionsModal.classList.add('active');
+    }
+
+    function closeShareOptionsModal() {
+        shareOptionsModal.classList.remove('active');
+        currentPostForShare = null; // Clear shared post context
+        dynamicShareOptionsList.innerHTML = ''; // Clear options
+    }
+
+    async function handleSharePost(post, userId) {
+        currentPostForShare = post; // Store the post for later use in modal actions
+        dynamicShareOptionsList.innerHTML = ''; // Clear previous options
+
+        const postLink = `${window.location.origin}/feed.html?postId=${post.id}`;
+
+        if (post.authorUid === userId) {
+            // Own post: Share to profile, Copy Link
+            dynamicShareOptionsList.innerHTML = `
+                <li><button id="share-to-profile-btn"><i class="fas fa-share-alt"></i> প্রোফাইলে শেয়ার করুন</button></li>
+                <li><button id="copy-link-btn"><i class="fas fa-copy"></i> লিঙ্ক কপি করুন</button></li>
+            `;
+            document.getElementById('share-to-profile-btn').addEventListener('click', () => {
+                closeShareOptionsModal();
+                openCreatePostModal('share', post.id, post.title, post.message, post.imageUrl);
+                // Increment share count after user confirms sharing to profile
+                database.ref(`posts/${post.id}/sharesCount`).transaction((currentShares) => {
+                    return (currentShares || 0) + 1;
+                });
+            });
+            document.getElementById('copy-link-btn').addEventListener('click', () => {
+                navigator.clipboard.writeText(postLink);
+                closeShareOptionsModal();
+                showAlert('সফল', 'পোস্ট লিঙ্ক কপি হয়েছে!', 'success');
+            });
+        } else {
+            // Other user's post: Telegram, WhatsApp, Copy Link, Report
+            dynamicShareOptionsList.innerHTML = `
+                <li><button id="share-telegram-btn"><i class="fab fa-telegram-plane"></i> টেলিগ্রামে শেয়ার করুন</button></li>
+                <li><button id="share-whatsapp-btn"><i class="fab fa-whatsapp"></i> হোয়াটসঅ্যাপে শেয়ার করুন</button></li>
+                <li><button id="copy-link-btn"><i class="fas fa-copy"></i> লিঙ্ক কপি করুন</button></li>
+                <li><button id="report-post-btn" style="color: var(--danger-color);"><i class="fas fa-flag"></i> পোস্ট রিপোর্ট করুন</button></li>
+            `;
+            document.getElementById('share-telegram-btn').addEventListener('click', () => {
+                window.open(`https://t.me/share/url?url=${encodeURIComponent(postLink)}&text=${encodeURIComponent(post.title)}`, '_blank');
+                closeShareOptionsModal();
+                // Increment share count
+                database.ref(`posts/${post.id}/sharesCount`).transaction((currentShares) => {
+                    return (currentShares || 0) + 1;
+                });
+            });
+            document.getElementById('share-whatsapp-btn').addEventListener('click', () => {
+                window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(post.title + " " + postLink)}`, '_blank');
+                closeShareOptionsModal();
+                // Increment share count
+                database.ref(`posts/${post.id}/sharesCount`).transaction((currentShares) => {
+                    return (currentShares || 0) + 1;
+                });
+            });
+            document.getElementById('copy-link-btn').addEventListener('click', () => {
+                navigator.clipboard.writeText(postLink);
+                closeShareOptionsModal();
+                showAlert('সফল', 'পোস্ট লিঙ্ক কপি হয়েছে!', 'success');
+            });
+            document.getElementById('report-post-btn').addEventListener('click', () => {
+                closeShareOptionsModal();
+                handleReportPost(post.id, userId);
+            });
+        }
+        openShareOptionsModal(); // Show the modal with populated options
+    }
+
+    async function handleReportPost(postId, reporterId) {
+        const confirmReport = confirm("আপনি কি নিশ্চিত এই পোস্টটি রিপোর্ট করতে চান? ভুল রিপোর্টের জন্য আপনার অ্যাকাউন্ট সাসপেন্ড হতে পারে।");
+        if (!confirmReport) return;
+
+        try {
+            // Add report to Firebase
+            await database.ref(`posts/${postId}/reports/${reporterId}`).set(true);
+            showAlert('সফল', 'পোস্টটি সফলভাবে রিপোর্ট করা হয়েছে।', 'success');
+        } catch (error) {
+            console.error('Error reporting post:', error);
+            showAlert('ব্যর্থ', 'পোস্ট রিপোর্ট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', 'error');
+        }
+    }
+
+
+    // Comment Modal Logic
+    function openCommentModal(postId) {
+        currentPostIdForComments = postId;
+        document.getElementById('comment-modal').classList.add('active');
+        loadCommentsForPost(postId);
+        // Auto-focus on comment input when modal opens
+        setTimeout(() => document.getElementById('comment-input').focus(), 300);
+    }
+
+    function closeCommentModal() {
+        currentPostIdForComments = null;
+        document.getElementById('comment-modal').classList.remove('active');
+        // Clear comment input and reset height
+        const commentInput = document.getElementById('comment-input');
+        commentInput.value = '';
+        commentInput.style.height = '40px';
+    }
+
+    function loadCommentsForPost(postId) {
+        const commentsList = document.getElementById('comments-list');
+        const noCommentsMsg = document.getElementById('no-comments-msg');
+        const commentsRef = database.ref(`postComments/${postId}`);
+        
+        commentsList.innerHTML = ''; // Clear existing comments
+        noCommentsMsg.style.display = 'none';
+
+        commentsRef.orderByChild('timestamp').on('value', (snapshot) => {
+            commentsList.innerHTML = ''; // Re-clear for real-time updates
+            if (snapshot.exists()) {
+                let commentsArray = [];
+                snapshot.forEach(childSnapshot => {
+                    commentsArray.push({ id: childSnapshot.key, ...childSnapshot.val() });
+                });
+                
+                commentsArray.sort((a, b) => a.timestamp - b.timestamp); // Oldest first for chat-like flow
+
+                commentsArray.forEach(comment => {
+                    const commentItem = document.createElement('li');
+                    commentItem.className = 'comment-item';
+                    commentItem.innerHTML = `
+                        <img src="${comment.userAvatarUrl || 'https://api.dicebear.com/9.x/initials/svg?seed=' + comment.username.charAt(0)}" alt="${comment.username}">
+                        <div class="comment-details">
+                            <div class="comment-author">${comment.username}</div>
+                            <p class="comment-text">${comment.comment}</p>
+                            <div class="comment-meta">
+                                <span>${new Date(comment.timestamp).toLocaleDateString('bn-BD')} ${new Date(comment.timestamp).toLocaleTimeString('bn-BD', { hour: '2-digit', minute: '2-digit' })}</span>
+                                <button class="reply-button" data-username="${comment.username}">রিপ্লাই</button>
+                            </div>
+                        </div>
+                    `;
+                    commentsList.appendChild(commentItem);
+                });
+                commentsList.scrollTop = commentsList.scrollHeight; // Scroll to latest comment
+            } else {
+                noCommentsMsg.style.display = 'block';
+            }
+        });
+    }
+
+    async function sendComment() {
+        const commentInput = document.getElementById('comment-input');
+        const commentText = commentInput.value.trim();
+        const sendCommentBtn = document.getElementById('send-comment-btn');
+
+        if (!commentText) {
+            showAlert('ত্রুটি', 'কমেন্ট খালি রাখা যাবে না।', 'error');
+            return;
+        }
+
+        if (!currentUserData) {
+            showAlert('লগইন ত্রুটি', 'আপনার তথ্য লোড হয়নি। অনুগ্রহ করে রিফ্রেশ করুন বা আবার লগইন করুন।', 'error');
+            return;
+        }
+
+        if (!currentPostIdForComments) {
+            showAlert('ত্রুটি', 'কোনো পোস্ট নির্বাচন করা হয়নি।', 'error');
+            return;
+        }
+
+        sendCommentBtn.disabled = true; // Disable button to prevent multiple submissions
+
+        const newComment = {
+            userId: auth.currentUser.uid,
+            username: currentUserData.username,
+            userAvatarUrl: currentUserData.avatarUrl,
+            comment: commentText,
+            timestamp: Date.now()
+        };
+
+        const postCommentsRef = database.ref(`postComments/${currentPostIdForComments}`);
+        const postRef = database.ref(`posts/${currentPostIdForComments}`);
+
+        try {
+            await postCommentsRef.push(newComment);
+            await postRef.child('commentsCount').transaction((currentCount) => (currentCount || 0) + 1);
+            commentInput.value = ''; // Clear input
+            commentInput.style.height = '40px'; // Reset height
+            // No alert needed for successful comment, it will appear in real-time
+        } catch (error) {
+            console.error('Failed to send comment:', error);
+            showAlert('ব্যর্থ', 'কমেন্ট পাঠাতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', 'error');
+        } finally {
+            sendCommentBtn.disabled = false; // Re-enable button
+        }
+    }
+
+    // Post Creation/Edit Modal Logic
+    const createPostModal = document.getElementById('create-post-modal');
+    const closeCreatePostModalBtn = document.getElementById('close-create-post-modal');
+    const fabCreatePost = document.getElementById('fab-create-post');
+    const postTitleInput = document.getElementById('post-title-input');
+    const postMessageInput = document.getElementById('post-message-input');
+    const postImageUrlInput = document.getElementById('post-image-url-input');
+    const submitPostBtn = document.getElementById('submit-post-btn');
+    const postModalTitle = document.getElementById('post-modal-title');
+    const boostPostCheckbox = document.getElementById('boost-post-checkbox');
+    const boostPostSection = document.getElementById('boost-post-section');
+    const boostAmountInput = document.getElementById('boost-amount-input');
+    const estimatedReach = document.getElementById('estimated-reach');
+    const estimatedLikes = document.getElementById('estimated-likes');
+    const estimatedComments = document.getElementById('estimated-comments');
+    const postLinkUrlInput = document.getElementById('post-link-url-input');
+    const postButtonTextInput = document.getElementById('post-button-text-input');
+
+    fabCreatePost.addEventListener('click', () => openCreatePostModal('create'));
+    closeCreatePostModalBtn.addEventListener('click', closeCreatePostModal);
+    submitPostBtn.addEventListener('click', handleSubmitPost);
+    boostPostCheckbox.addEventListener('change', () => {
+        boostPostSection.style.display = boostPostCheckbox.checked ? 'block' : 'none';
+    });
+    boostAmountInput.addEventListener('input', updateEstimatedBoostReach);
+
+
+    function openCreatePostModal(mode = 'create', postId = null, prefillTitle = '', prefillMessage = '', prefillImageUrl = '') {
+        currentEditingPostId = postId;
+        postModalTitle.textContent = mode === 'create' ? 'নতুন পোস্ট তৈরি করুন' : (mode === 'share' ? 'পোস্ট শেয়ার করুন' : 'পোস্ট এডিট করুন');
+        submitPostBtn.textContent = mode === 'create' ? 'পোস্ট করুন' : (mode === 'share' ? 'শেয়ার করুন' : 'সেভ করুন');
+
+        // Reset all fields
+        postTitleInput.value = prefillTitle;
+        postMessageInput.value = prefillMessage;
+        postImageUrlInput.value = prefillImageUrl;
+        boostPostCheckbox.checked = false;
+        boostPostSection.style.display = 'none';
+        boostAmountInput.value = '10';
+        updateEstimatedBoostReach(); // Reset estimates
+        postLinkUrlInput.value = '';
+        postButtonTextInput.value = '';
+        submitPostBtn.disabled = false; // Ensure button is enabled
+
+        // Show/hide premium post options based on user's subscription status
+        const premiumPostOptions = document.getElementById('premium-post-options');
+        if (currentUserData && currentUserData.isSubscriptionUser) {
+            premiumPostOptions.style.display = 'block';
+        } else {
+            premiumPostOptions.style.display = 'none';
+        }
+
+
+        if (mode === 'edit' && postId) {
+            database.ref(`posts/${postId}`).once('value', (snapshot) => {
+                const postData = snapshot.val();
+                if (postData) {
+                    postTitleInput.value = postData.title || '';
+                    postMessageInput.value = postData.message || '';
+                    postImageUrlInput.value = postData.imageUrl || '';
+                    
+                    // Populate premium fields
+                    postLinkUrlInput.value = postData.linkUrl || '';
+                    postButtonTextInput.value = postData.buttonText || '';
+
+                    if (postData.isBoosted) {
+                        boostPostCheckbox.checked = true;
+                        boostPostSection.style.display = 'block';
+                        boostAmountInput.value = postData.boostAmount || '10';
+                        updateEstimatedBoostReach();
+                    }
+                } else {
+                    showAlert('ত্রুটি', 'পোস্ট ডেটা লোড করা যায়নি।', 'error');
+                    closeCreatePostModal();
+                    return;
+                }
+            });
+        }
+        createPostModal.classList.add('active');
+    }
+
+    function closeCreatePostModal() {
+        createPostModal.classList.remove('active');
+        currentEditingPostId = null;
+    }
+
+    function updateEstimatedBoostReach() {
+        const amount = parseInt(boostAmountInput.value) || 0;
+        // Simple linear estimation for demonstration
+        estimatedReach.textContent = `${amount * 5}-${amount * 10} জন`;
+        estimatedLikes.textContent = `${Math.floor(amount * 0.5)}-${Math.floor(amount * 1)}টি`;
+        estimatedComments.textContent = `${Math.floor(amount * 0.2)}-${Math.floor(amount * 0.5)}টি`;
+    }
+
+
+    async function handleSubmitPost() {
+        const title = postTitleInput.value.trim();
+        const message = postMessageInput.value.trim();
+        const imageUrl = postImageUrlInput.value.trim();
+        const isBoosted = boostPostCheckbox.checked;
+        const boostAmount = isBoosted ? parseInt(boostAmountInput.value) : 0;
+        const linkUrl = postLinkUrlInput.value.trim();
+        const buttonText = postButtonTextInput.value.trim();
+
+        if (!title || !message) {
+            showAlert('ত্রুটি', 'পোস্টের শিরোনাম এবং বিবরণ খালি রাখা যাবে না।', 'error');
+            return;
+        }
+
+        if (isBoosted && (isNaN(boostAmount) || boostAmount <= 0)) {
+            showAlert('ত্রুটি', 'বুস্টের পরিমাণ সঠিক নয়।', 'error');
+            return;
+        }
+        
+        if (isBoosted && currentUserData.balance < boostAmount) {
+            showAlert('ব্যর্থ', 'আপনার ব্যালেন্সে বুস্ট করার জন্য পর্যাপ্ত টাকা নেই।', 'error');
+            return;
+        }
+
+        // Only allow link and button for subscription users
+        const finalLinkUrl = (currentUserData.isSubscriptionUser && linkUrl) ? linkUrl : 'N/A';
+        const finalButtonText = (currentUserData.isSubscriptionUser && buttonText) ? buttonText : 'N/A';
+
+        const newPostData = { // Renamed to newPostData for clarity
+            authorUid: auth.currentUser.uid,
+            authorName: currentUserData.username,
+            authorAvatarUrl: currentUserData.avatarUrl,
+            isAuthorSubscriptionUser: currentUserData.isSubscriptionUser || false,
+            title: title,
+            message: message,
+            imageUrl: imageUrl || 'N/A',
+            linkUrl: finalLinkUrl,
+            buttonText: finalButtonText,
+            timestamp: Date.now(),
+            likesCount: 0,
+            commentsCount: 0,
+            sharesCount: 0,
+            viewsCount: 0,
+            isBoosted: isBoosted,
+            boostAmount: isBoosted ? boostAmount : 0,
+            boostExpiresAt: isBoosted ? Date.now() + (24 * 60 * 60 * 1000 * (boostAmount / 10)) : 0, // Example: 1 day per 10 BDT boost
+        };
+
+        submitPostBtn.disabled = true; // Disable button to prevent double submission
+        closeCreatePostModal(); // Close the modal immediately
+
+        // --- Optimistic UI Update ---
+        const postsContainer = document.getElementById('posts-container');
+        const tempPostId = 'temp-' + Date.now(); // Unique temporary ID
+        const tempPostElement = document.createElement('div');
+        tempPostElement.className = 'post-item optimistic-post';
+        tempPostElement.id = tempPostId;
+        tempPostElement.innerHTML = `
+            <div class="post-header">
+                <div class="post-author-info">
+                    <img src="${newPostData.authorAvatarUrl}" alt="Author">
+                    <div class="author-details">
+                        <span class="post-author">${newPostData.authorName}
+                            ${newPostData.isAuthorSubscriptionUser ? `<i class="fas fa-check-circle post-blue-tick" title="সাবস্ক্রিপশন মেম্বার"></i>` : ''}
+                        </span>
+                        <span class="post-date">পোস্ট হচ্ছে...</span>
+                    </div>
+                </div>
+                ${newPostData.isBoosted ? `<i class="fas fa-bolt boosted-icon" title="বুস্টেড পোস্ট"></i>` : ''}
+            </div>
+            <h3 class="post-title">${newPostData.title}</h3>
+            <p class="post-message">${newPostData.message}</p>
+            ${newPostData.imageUrl && newPostData.imageUrl !== 'N/A' ? `<img src="${newPostData.imageUrl}" alt="Post Image" class="post-image">` : ''}
+            ${newPostData.linkUrl && newPostData.linkUrl !== 'N/A' && newPostData.buttonText && newPostData.buttonText !== 'N/A' ? `<a href="${newPostData.linkUrl}" target="_blank" class="post-link-button"><i class="fas fa-external-link-alt"></i> ${newPostData.buttonText}</a>` : ''}
+            <div class="post-actions" style="opacity: 0.5;">
+                <button class="action-button"><i class="fas fa-heart"></i> <span>0</span></button>
+                <button class="action-button"><i class="fas fa-comment"></i> <span>0</span></button>
+                <button class="action-button"><i class="fas fa-share-alt"></i> <span>0</span></button>
+            </div>
+            <div class="post-views" style="opacity: 0.5;">
+                <i class="fas fa-eye"></i> <span>0</span> ভিউ
+            </div>
+        `;
+        postsContainer.prepend(tempPostElement); // Add to top of the feed
+
+        try {
+            if (currentEditingPostId) {
+                // Editing existing post
+                const updateData = {...newPostData};
+                delete updateData.likesCount; // Don't reset counts on edit
+                delete updateData.commentsCount;
+                delete updateData.sharesCount;
+                delete updateData.viewsCount;
+                await database.ref(`posts/${currentEditingPostId}`).update(updateData);
+                showAlert('সফল', 'পোস্ট সফলভাবে এডিট করা হয়েছে।', 'success');
+            } else {
+                // Creating new post
+                const newPostRef = await database.ref('posts').push(newPostData);
+                // Deduct boost amount if applicable
+                if (isBoosted) {
+                    await database.ref(`users/${auth.currentUser.uid}/balance`).transaction((currentBalance) => {
+                        return (currentBalance || 0) - boostAmount;
+                    });
+                }
+                showAlert('সফল', 'পোস্ট সফলভাবে আপলোড করা হয়েছে!', 'success');
+            }
+            // Remove the temporary optimistic post. The real-time listener will add/update the actual post.
+            document.getElementById(tempPostId)?.remove();
+        } catch (error) {
+            console.error('Error submitting post:', error);
+            showAlert('ব্যর্থ', 'পোস্ট আপলোড/এডিট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', 'error');
+            // Remove the temporary post if submission failed
+            document.getElementById(tempPostId)?.remove();
+        } finally {
+            submitPostBtn.disabled = false; // Re-enable button
+        }
+    }
+
+
+    // 3-dot Post Options Menu Logic
+    const postOptionsMenu = document.getElementById('post-options-menu');
+    const postOptionsOverlay = document.getElementById('post-options-overlay');
+    
+    postOptionsOverlay.addEventListener('click', closePostOptionsMenu);
+
+    function openPostOptionsMenu(toggleButton, post) {
+        currentPostForShare = post; // Store post context for options
+        postOptionsMenu.innerHTML = ''; // Clear existing options
+
+        if (post.authorUid === auth.currentUser.uid) {
+            // Own post: Edit, Delete
+            postOptionsMenu.innerHTML = `
+                <button id="edit-post-option"><i class="fas fa-pencil-alt"></i> এডিট করুন</button>
+                <button id="delete-post-option"><i class="fas fa-trash-alt"></i> ডিলিট করুন</button>
+            `;
+            document.getElementById('edit-post-option').addEventListener('click', () => {
+                closePostOptionsMenu();
+                openCreatePostModal('edit', post.id);
+            });
+            document.getElementById('delete-post-option').addEventListener('click', () => {
+                closePostOptionsMenu();
+                deletePost(post.id);
+            });
+        } else {
+            // Other user's post: Report
+            postOptionsMenu.innerHTML = `
+                <button id="report-from-options-btn" style="color: var(--danger-color);"><i class="fas fa-flag"></i> পোস্ট রিপোর্ট করুন</button>
+            `;
+            document.getElementById('report-from-options-btn').addEventListener('click', () => {
+                closePostOptionsMenu();
+                handleReportPost(post.id, auth.currentUser.uid);
+            });
+        }
+
+        // Position the menu next to the clicked button
+        const rect = toggleButton.getBoundingClientRect();
+        postOptionsMenu.style.top = `${rect.bottom + 5}px`;
+        let leftPos = rect.right - postOptionsMenu.offsetWidth;
+        if (leftPos < 10) leftPos = 10;
+        postOptionsMenu.style.left = `${leftPos}px`;
+        
+        postOptionsMenu.dataset.targetPostId = post.id;
+        postOptionsMenu.classList.add('active');
+        postOptionsOverlay.classList.add('active');
+    }
+
+    function closePostOptionsMenu(event) {
+        if (event && event.target && event.target.closest('.post-options-menu')) {
+            return;
+        }
+        postOptionsMenu.classList.remove('active');
+        postOptionsOverlay.classList.remove('active');
+        postOptionsMenu.removeAttribute('data-target-post-id');
+        currentPostForShare = null;
+    }
+
+    async function deletePost(postId) {
+        const confirmDelete = confirm("আপনি কি নিশ্চিত এই পোস্টটি ডিলিট করতে চান? এই পোস্টের সাথে যুক্ত সমস্ত কমেন্ট ও লাইক মুছে যাবে।");
+        if (!confirmDelete) return;
+
+        try {
+            await database.ref(`posts/${postId}`).remove();
+            await database.ref(`postComments/${postId}`).remove();
+            await database.ref(`postLikes/${postId}`).remove();
+            // UI will update via real-time listener
+            showAlert('সফল', 'পোস্ট সফলভাবে ডিলিট করা হয়েছে।', 'success');
+        } catch (error) {
+            console.error('Error deleting post:', error);
+            showAlert('ব্যর্থ', 'পোস্ট ডিলিট করতে সমস্যা হয়েছে। আবার চেষ্টা করুন।', 'error');
+        }
+    }
+
+
+    // Subscription Promo Modal Logic
+    const subscriptionPromoModal = document.getElementById('subscription-promo-modal');
+    const closeSubscriptionPromoModalBtn = document.getElementById('close-subscription-promo-modal');
+    const goToPlanBtn = document.getElementById('go-to-plan-btn');
+
+    closeSubscriptionPromoModalBtn.addEventListener('click', () => subscriptionPromoModal.classList.remove('active'));
+    goToPlanBtn.addEventListener('click', () => {
+        subscriptionPromoModal.classList.remove('active');
+        window.location.href = 'plan.html';
+    });
+
+    function openSubscriptionPromoModal() {
+        subscriptionPromoModal.classList.add('active');
+    }
+
+
+    function initializeStaticUI() {
+        const closeAlertDialogBtn = document.getElementById('close-alert-btn');
+        const commentModal = document.getElementById('comment-modal');
+        const closeCommentModalBtn = document.getElementById('close-comment-modal');
+        const sendCommentBtn = document.getElementById('send-comment-btn');
+        const commentInput = document.getElementById('comment-input');
+
+        
+        if(closeAlertDialogBtn) closeAlertDialogBtn.addEventListener('click', () => {
+            document.getElementById('alert-modal').classList.remove('active');
+        });
+
+        // Comment modal event listeners
+        if (closeCommentModalBtn) closeCommentModalBtn.addEventListener('click', closeCommentModal);
+        if (sendCommentBtn) sendCommentBtn.addEventListener('click', sendComment);
+        
+        // Auto-resize textarea for comments
+        if (commentInput) {
+            commentInput.addEventListener('input', () => {
+                commentInput.style.height = 'auto';
+                commentInput.style.height = (commentInput.scrollHeight) + 'px';
+                sendCommentBtn.disabled = commentInput.value.trim() === '';
+            });
+            commentInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    if (commentInput.value.trim() !== '') {
+                        sendComment();
+                    }
+                }
+            });
+        }
+
+        // Delegation for reply buttons within comments
+        document.getElementById('comments-list').addEventListener('click', (e) => {
+            if (e.target.classList.contains('reply-button')) {
+                const usernameToReply = e.target.dataset.username;
+                const input = document.getElementById('comment-input');
+                input.value = `@${usernameToReply} `;
+                input.focus();
+                // Adjust textarea height if needed
+                input.style.height = 'auto';
+                input.style.height = (input.scrollHeight) + 'px';
+                sendCommentBtn.disabled = false;
+            }
+        });
+
+        // Event listener for closing post options menu when clicking outside
+        postOptionsOverlay.addEventListener('click', (e) => {
+            if (e.target.id === 'post-options-overlay') { // Only close if clicking the overlay itself
+                closePostOptionsMenu();
+            }
+        });
+    }
+
+    function showAlert(title, message, type = 'info') {
+        const alertModal = document.getElementById('alert-modal');
+        if (!alertModal) return; 
+
+        document.getElementById('alert-title').textContent = title;
+        document.getElementById('alert-message').textContent = message;
+        const icon = document.createElement('div'); 
+        icon.id = 'alert-icon'; 
+        const existingIcon = alertModal.querySelector('#alert-icon');
+        if (existingIcon) existingIcon.remove();
+
+        if (type === 'success') icon.className = 'fas fa-check-circle success';
+        else if (type === 'error') icon.className = 'fas fa-times-circle error';
+        else icon.className = 'fas fa-info-circle info';
+        
+        alertModal.querySelector('.modal-content').prepend(icon);
+        alertModal.classList.add('active');
+    }
+
+</script>
+</body>
+</html>

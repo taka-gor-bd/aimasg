@@ -1,0 +1,48 @@
+)<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI সাপোর্ট</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/support.style.css">
+</head>
+<body>
+    
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="chat-container">
+            <!-- চ্যাটের বার্তাগুলো এখানে দেখানো হবে -->
+            <div class="chat-window" id="chat-window">
+                <!-- প্রাথমিক বার্তা JS দ্বারা যোগ হবে -->
+            </div>
+            
+            <!-- দ্রুত উত্তরের জন্য বাটন -->
+            <div class="quick-reply-container" id="quick-reply-container">
+                <button class="quick-reply-btn" data-query="আমার ব্যালেন্স কত?">আমার ব্যালেন্স</button>
+                <button class="quick-reply-btn" data-query="আমি কয়টি পোস্ট করেছি?">আমার পোস্ট</button>
+                <button class="quick-reply-btn" data-query="কিভাবে কাজ করব?">কিভাবে কাজ করব?</button>
+            </div>
+            
+            <!-- বার্তা লেখার এবং পাঠানোর জায়গা -->
+            <div class="chat-input-form">
+                <input type="text" id="user-input" placeholder="আপনার প্রশ্ন লিখুন..." autocomplete="off">
+                <button id="send-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </main>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    
+    <script src="js/main.js"></script>
+    <script src="js/support.script.js"></script>
+</body>
+</html>

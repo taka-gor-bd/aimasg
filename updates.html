@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্ল্যাটফর্ম আপডেট</title>
+
+    <!-- CSS লাইব্রেরি -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <!-- আপনার CSS ফাইল -->
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/home.style.css"> 
+    <link rel="stylesheet" href="css/updates.style.css">
+</head>
+<body>
+
+    <header class="page-header">
+        <a href="home.html" class="back-button"><i class="fas fa-arrow-left"></i></a>
+        <div class="header-placeholder" style="flex-grow: 1;"></div> <!-- শিরোনামের জন্য খালি জায়গা -->
+    </header>
+
+    <main class="main-content">
+        <!-- কমিউনিটি ফিড পেজে যাওয়ার জন্য বাটন -->
+        <a href="feed.html" class="view-feed-button">
+            <div class="button-icon">
+                <i class="fas fa-users"></i>
+            </div>
+            <div class="button-text">
+                <h3>কমিউনিটি ফিড দেখুন</h3>
+                <p>অন্যান্য ব্যবহারকারীদের পোস্ট দেখুন ও আলোচনা করুন</p>
+            </div>
+            <div class="button-arrow">
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </a>
+
+        <!-- অ্যাডমিনের সব আপডেট পোস্ট এই কন্টেইনারে দেখানো হবে -->
+        <div class="updates-container" id="updates-container">
+            <p class="loading-text" id="loading-text">আপডেট লোড হচ্ছে...</p>
+        </div>
+    </main>
+    
+    <!-- === কমেন্ট শিট (নিচ থেকে স্লাইডিং পপ-আপ) === -->
+    <div class="comment-sheet-overlay" id="comment-sheet-overlay">
+        <div class="comment-sheet-content" id="comment-sheet-content">
+            <!-- হেডার -->
+            <div class="comment-sheet-header">
+                <h3 id="comment-sheet-title">মন্তব্যসমূহ</h3>
+                <button class="close-sheet-btn" id="close-sheet-btn"><i class="fas fa-times"></i></button>
+            </div>
+            
+            <!-- সব কমেন্টের তালিকা -->
+            <div class="comment-list" id="comment-list">
+                <!-- JS দ্বারা কমেন্ট এখানে লোড হবে -->
+            </div>
+
+            <!-- নতুন কমেন্ট করার ইনপুট বক্স -->
+            <div class="comment-input-area">
+                <img id="currentUserCommentAvatar" src="images/default-avatar.png" alt="You">
+                <input type="text" id="comment-input-field" placeholder="আপনার মন্তব্য লিখুন...">
+                <button id="post-comment-btn" disabled><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- JS ফাইলগুলো (Firebase SDK) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    
+    <!-- আপনার JS ফাইল -->
+    <script src="js/main.js"></script>
+    <script src="js/updates.script.js"></script>
+</body>
+</html>

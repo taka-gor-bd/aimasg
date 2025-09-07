@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নলেজ কুইজ</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/quiz.style.css">
+</head>
+<body>
+    
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        
+        <!-- কুইজ শুরু করার স্ক্রিন -->
+        <div id="quiz-start-screen" class="quiz-screen active">
+            <div class="card quiz-intro-card">
+                <i class="fas fa-brain quiz-icon"></i>
+                <h1 class="quiz-title">নলেজ কুইজ</h1>
+                <p class="quiz-description">আপনার জ্ঞান পরীক্ষা করুন এবং জিতুন আকর্ষণীয় পুরস্কার! প্রতিটি সঠিক উত্তরের জন্য পাবেন ৳ ০.৪০।</p>
+                <p class="quiz-attempts" id="quiz-attempts-left">আজকের জন্য আপনার সুযোগ বাকি আছে: ৩/৩</p>
+                <button class="quiz-start-btn" id="prepare-quiz-btn">কুইজ শুরু করুন</button>
+            </div>
+        </div>
+        
+        <!-- কুইজ খেলার স্ক্রিন -->
+        <div id="quiz-game-screen" class="quiz-screen">
+            <div class="question-header">
+                <div class="timer-container">
+                    <div class="timer-progress" id="timer-progress"></div>
+                    <span id="timer-text">30</span>
+                </div>
+                <div class="question-counter">প্রশ্ন <span id="current-question-number">১</span>/৫</div>
+            </div>
+            <div class="question-container">
+                <h2 id="question-text">প্রশ্ন এখানে লোড হবে...</h2>
+            </div>
+            <div class="answer-grid" id="answer-grid"></div>
+        </div>
+        
+        <!-- কুইজ শেষে ফলাফল স্ক্রিন -->
+        <div id="quiz-summary-screen" class="quiz-screen">
+            <div class="card summary-card">
+                <i class="fas fa-poll-h summary-icon"></i>
+                <h2>কুইজ সম্পন্ন!</h2>
+                <div class="summary-details">
+                    <p>সঠিক উত্তর: <strong id="summary-score">০/৫</strong></p>
+                    <p>আজকের আয়: <strong id="summary-earnings">৳ ০.০০</strong></p>
+                </div>
+                <button class="quiz-start-btn" id="back-to-quiz-home-btn">আবার চেষ্টা করুন</button>
+            </div>
+        </div>
+
+        <!-- সুযোগ শেষ হলে কাউন্টডাউন স্ক্রিন -->
+        <div id="quiz-cooldown-screen" class="quiz-screen">
+            <div class="card cooldown-card">
+                <i class="far fa-clock cooldown-icon"></i>
+                <h2>আপনার আজকের সুযোগ শেষ</h2>
+                <p>পরবর্তী কুইজ শুরু হবে:</p>
+                <div id="cooldown-timer" class="cooldown-timer">০০:০০:০০</div>
+            </div>
+        </div>
+
+    </main>
+    
+    <!-- "আপনি কি প্রস্তুত?" পপ-আপ -->
+    <div class="modal-overlay" id="ready-check-modal-overlay">
+        <div class="modal-content ready-check-modal">
+            <i class="fas fa-flag-checkered ready-icon"></i>
+            <h3>আপনি কি প্রস্তুত?</h3>
+            <p>প্রশ্ন শুরু হলে ৩০ সেকেন্ড কাউন্টডাউন চালু হয়ে যাবে।</p>
+            <button class="quiz-start-btn" id="start-quiz-btn">হ্যাঁ, শুরু করুন</button>
+        </div>
+    </div>
+
+    <!-- উত্তর সঠিক না ভুল, তা দেখানোর জন্য মডাল -->
+    <div class="modal-overlay" id="feedback-modal-overlay">
+        <div class="modal-content feedback-modal">
+            <div class="confetti-container" id="confetti-container"></div>
+            <div id="feedback-icon"></div>
+            <h3 id="feedback-title"></h3>
+            <p id="feedback-message"></p>
+            <button class="next-question-btn" id="next-question-btn">পরবর্তী প্রশ্ন</button>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    
+    <script src="js/main.js"></script>
+    <script src="js/quiz.script.js"></script>
+</body>
+</html>

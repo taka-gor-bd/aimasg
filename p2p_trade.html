@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ট্রেড চলছে</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/p2p_trade.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <!-- ট্রেডের তথ্য কার্ড -->
+        <div class="card trade-info-card">
+            <div class="trade-header">
+                <h2 id="trade-amount">৳ ০.০০</h2>
+                <span class="trade-status" id="trade-status">অপেক্ষা চলছে...</span>
+            </div>
+            <div class="trade-details-grid">
+                <div><span>অর্ডার আইডি:</span><strong id="trade-order-id">N/A</strong></div>
+                <div><span>দর:</span><strong id="trade-price">৳ ১.০০</strong></div>
+                <div><span>পেমেন্ট মেথড:</span><strong id="trade-payment-method">N/A</strong></div>
+                <div><span>পেমেন্ট নাম্বার:</span><strong id="trade-payment-number">N/A</strong></div>
+            </div>
+        </div>
+
+        <!-- চ্যাট বক্স -->
+        <div class="chat-box-container">
+            <div class="chat-window" id="chat-window">
+                <!-- চ্যাটের বার্তা JS দ্বারা যোগ হবে -->
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-input" placeholder="বার্তা লিখুন...">
+                <button id="send-chat-btn"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+
+        <!-- অ্যাকশন বাটন এবং টাইমার -->
+        <div class="action-panel" id="action-panel">
+            <!-- বাটনগুলো JS দ্বারা যোগ হবে -->
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/p2p_trade.script.js"></script>
+</body>
+</html>

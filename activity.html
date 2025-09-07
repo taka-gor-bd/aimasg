@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>কার্যকলাপ</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/activity.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">আপনার কার্যকলাপ</h1>
+            <p class="page-subtitle">আপনার সকল লেনদেনের ইতিহাস এখানে দেখুন।</p>
+        </div>
+
+        <!-- ফিল্টার বাটন -->
+        <div class="filter-nav">
+            <button class="filter-btn active" data-filter="all">সকল</button>
+            <button class="filter-btn" data-filter="withdrawal">উইথড্র</button>
+            <button class="filter-btn" data-filter="deposit">ডিপোজিট</button>
+        </div>
+
+        <!-- কার্যকলাপের তালিকা -->
+        <div class="activity-list-container" id="activity-list-container">
+            <p class="loading-text">কার্যকলাপ লোড হচ্ছে...</p>
+        </div>
+    </main>
+
+    <!-- রসিদ দেখার জন্য মডাল -->
+    <div class="modal-overlay receipt-modal" id="receipt-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <div class="receipt-header">
+                <i class="fas fa-receipt"></i>
+                <h3>লেনদেনের রসিদ</h3>
+            </div>
+            <div class="receipt-body" id="receipt-body">
+                <!-- রসিদের তথ্য JS দ্বারা এখানে যোগ হবে -->
+            </div>
+            <button class="action-btn-primary" id="copy-receipt-btn" style="width: 100%; margin-top: 20px;">
+                <i class="fas fa-copy"></i> তথ্য কপি করুন
+            </button>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/activity.script.js"></script>
+</body>
+</html>

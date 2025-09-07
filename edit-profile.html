@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রোফাইল এডিট করুন</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/edit-profile.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">প্রোফাইল এডিট করুন</h1>
+            <p class="page-subtitle">আপনার ব্যক্তিগত তথ্য পরিবর্তন করুন।</p>
+        </div>
+
+        <!-- নাম পরিবর্তনের কার্ড -->
+        <div class="card form-card">
+            <h3>নাম পরিবর্তন</h3>
+            <div class="form-group">
+                <label for="edit-name">আপনার নাম</label>
+                <input type="text" id="edit-name" placeholder="আপনার নতুন নাম">
+            </div>
+            <button class="action-btn-primary" id="save-name-btn" style="width: 100%;">পরিবর্তন সেভ করুন</button>
+        </div>
+        
+        <!-- পাসওয়ার্ড রিসেট কার্ড -->
+        <div class="card form-card">
+            <h3>পাসওয়ার্ড নিরাপত্তা</h3>
+            <p class="description">আপনার পাসওয়ার্ড রিসেট করতে চাইলে, আমরা আপনার রেজিস্টার করা ইমেইলে একটি লিঙ্ক পাঠিয়ে দেব।</p>
+            <button class="action-btn-secondary" id="reset-password-btn" style="width: 100%;">পাসওয়ার্ড রিসেট লিঙ্ক পাঠান</button>
+        </div>
+    </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/edit-profile.script.js"></script>
+</body>
+</html>

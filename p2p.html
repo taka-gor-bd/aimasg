@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P2P ট্রেডিং</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/p2p.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">P2P ট্রেডিং</h1>
+            <p class="page-subtitle">ব্যবহারকারীদের মধ্যে নিরাপদে ব্যালেন্স ক্রয়-বিক্রয় করুন।</p>
+        </div>
+
+        <!-- ট্যাব নেভিগেশন -->
+        <div class="p2p-nav">
+            <button class="p2p-tab-btn active" data-tab="buy">কিনুন</button>
+            <button class="p2p-tab-btn" data-tab="sell">বিক্রি করুন</button>
+        </div>
+
+        <!-- অফারগুলোর তালিকা -->
+        <div class="offers-list-container" id="offers-list-container">
+            <p class="loading-text">অফার লোড হচ্ছে...</p>
+        </div>
+    </main>
+
+    <!-- নতুন অফার তৈরির জন্য ভাসমান বাটন -->
+    <a href="p2p_create_offer.html" class="fab-create-offer" title="নতুন অফার তৈরি করুন">
+        <i class="fas fa-plus"></i>
+    </a>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/p2p.script.js"></script>
+</body>
+</html>

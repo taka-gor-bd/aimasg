@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লিডারবোর্ড</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/leaderboard.style.css">
+</head>
+<body>
+    
+    <!-- হেডার এবং সাইডবার JS দ্বারা লোড হবে -->
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">লিডারবোর্ড</h1>
+            <p class="page-subtitle">সর্বাধিক ব্যালেন্সের উপর ভিত্তি করে র‍্যাঙ্কিং</p>
+        </div>
+        
+        <!-- লিডারবোর্ড কন্টেইনার -->
+        <div class="leaderboard-container" id="leaderboard-container">
+            <p class="loading-text">লিডারবোর্ড লোড হচ্ছে...</p>
+        </div>
+
+    </main>
+    
+    <!-- ব্যবহারকারীর বিস্তারিত দেখার জন্য পপ-আপ মডাল -->
+    <div class="modal-overlay" id="user-details-modal-overlay">
+        <div class="modal-content user-details-modal" id="user-details-modal">
+            <button class="modal-close-btn" id="close-user-details-modal">&times;</button>
+            
+            <div class="modal-profile-header">
+                <img src="images/avatar-placeholder.png" alt="Avatar" id="modal-avatar" class="modal-avatar">
+                <h3 class="modal-name">
+                    <a href="#" id="modal-profile-link">লোড হচ্ছে...</a>
+                </h3>
+                <p class="modal-username" id="modal-username">@username</p>
+            </div>
+            
+            <div class="modal-stats">
+                <div class="stat-item">
+                    <span id="modal-posts-count">۰</span><label>পোস্ট</label>
+                </div>
+                <div class="stat-item">
+                    <span id="modal-followers-count">۰</span><label>ফলোয়ার</label>
+                </div>
+                <div class="stat-item">
+                    <span id="modal-balance">۰</span><label>ব্যালেন্স</label>
+                </div>
+            </div>
+            
+            <div class="modal-actions" id="modal-follow-btn-container">
+                <!-- ফলো বাটন JS দ্বারা এখানে যুক্ত হবে -->
+            </div>
+        </div>
+    </div>
+    
+    <!-- JS ফাইলগুলো -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    
+    <script src="js/main.js"></script>
+    <script src="js/leaderboard.script.js"></script>
+</body>
+</html>

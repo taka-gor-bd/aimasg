@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>কাজ করুন</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/tasks.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">কাজ করে আয় করুন</h1>
+            <p class="page-subtitle">নিচের তালিকা থেকে কাজ সম্পন্ন করে আয় করুন।</p>
+        </div>
+        <div id="tasks-container">
+            <p class="loading-text">কাজ লোড হচ্ছে...</p>
+        </div>
+    </main>
+    
+    <!-- 'আমার জব' বাটন -->
+    <div class="my-tasks-fab" id="my-tasks-fab" title="আমার জব">
+        <i class="fas fa-history"></i>
+    </div>
+    
+    <!-- 'আমার জব' মডাল -->
+    <div class="modal-overlay my-tasks-modal" id="my-tasks-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <div class="modal-header">
+                <h3>আমার পোস্ট করা জব</h3>
+                <button class="add-new-task-btn" id="add-new-task-btn" title="নতুন জব পোস্ট করুন">
+                    <i class="fas fa-plus"></i>
+                </button>
+            </div>
+            <div id="my-tasks-list">
+                <p class="loading-text">আপনার জব লোড হচ্ছে...</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- টাস্কের বিস্তারিত দেখার জন্য নতুন মডাল -->
+    <div class="modal-overlay task-details-modal" id="task-details-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <div class="modal-header">
+                <h3 id="modal-task-title"></h3>
+            </div>
+            <div class="modal-body">
+                <p><strong>পোস্ট করেছেন:</strong> <span id="modal-task-creator"></span></p>
+                <p id="modal-task-description"></p>
+                <p><strong>পুরস্কার:</strong> <strong id="modal-task-reward" style="color: var(--primary-color);"></strong></p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/tasks.script.js"></script>
+</body>
+</html>

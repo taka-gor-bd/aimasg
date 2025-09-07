@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ডিপোজিট করুন</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/deposit.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">ডিপোজিট করুন</h1>
+            <p class="page-subtitle">আপনার অ্যাকাউন্টে ব্যালেন্স যোগ করুন।</p>
+        </div>
+
+        <!-- টাকা পাঠানোর নির্দেশনা কার্ড -->
+        <div class="card instruction-card">
+            <h3>টাকা পাঠানোর নিয়মাবলী</h3>
+            <p>নিচের যেকোনো একটি নাম্বারে "সেন্ড মানি" করুন এবং তারপর নিচের ফর্মটি পূরণ করুন।</p>
+            <div class="number-box">
+                <p><strong>বিকাশ:</strong> <span id="bkash-number">01700000000</span></p>
+                <button class="copy-btn" data-target="bkash-number"><i class="fas fa-copy"></i></button>
+            </div>
+            <div class="number-box">
+                <p><strong>নগদ:</strong> <span id="nagad-number">01800000000</span></p>
+                <button class="copy-btn" data-target="nagad-number"><i class="fas fa-copy"></i></button>
+            </div>
+        </div>
+
+        <!-- ডিপোজিট ফর্ম -->
+        <div class="card form-card">
+            <h3>আপনার তথ্য জমা দিন</h3>
+            <form id="deposit-form">
+                <div class="form-group">
+                    <label>কোন মাধ্যমে টাকা পাঠিয়েছেন?</label>
+                    <div class="method-select">
+                        <label>
+                            <input type="radio" name="method" value="bKash" checked>
+                            <div class="method-box">
+                                <img src="images/bkash-logo.png" alt="bKash">
+                                <span>বিকাশ</span>
+                            </div>
+                        </label>
+                        <label>
+                            <input type="radio" name="method" value="Nagad">
+                            <div class="method-box">
+                                <img src="images/nagad-logo.png" alt="Nagad">
+                                <span>নগদ</span>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="amount">টাকার পরিমাণ</label>
+                    <input type="number" id="amount" placeholder="কত টাকা পাঠিয়েছেন?" required>
+                </div>
+                <div class="form-group">
+                    <label for="sender-number">আপনার নাম্বার</label>
+                    <input type="tel" id="sender-number" placeholder="কোন নাম্বার থেকে টাকা পাঠিয়েছেন?" required>
+                </div>
+                <div class="form-group">
+                    <label for="trx-id">Transaction ID (TrxID)</label>
+                    <input type="text" id="trx-id" placeholder="টাকা পাঠানোর পর পাওয়া TrxID" required>
+                </div>
+                <p id="error-message" class="error-message"></p>
+                <button type="submit" class="action-btn-primary" id="submit-deposit-btn">অনুরোধ জমা দিন</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/deposit.script.js"></script>
+</body>
+</html>

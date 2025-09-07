@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নতুন জব পোস্ট করুন</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/create_task.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">আপনার জব পোস্ট করুন</h1>
+        </div>
+        
+        <div class="card">
+            <form id="create-task-form">
+                <div class="form-group">
+                    <label for="task-title">কাজের শিরোনাম</label>
+                    <input type="text" id="task-title" placeholder="যেমন: আমার ইউটিউব চ্যানেল সাবস্ক্রাইব করুন" required>
+                </div>
+                <div class="form-group">
+                    <label for="task-link">জব লিঙ্ক</label>
+                    <input type="url" id="task-link" placeholder="https://youtube.com/channel/..." required>
+                </div>
+                <div class="form-group">
+                    <label for="task-description">কাজের বিস্তারিত বিবরণ</label>
+                    <textarea id="task-description" rows="3" placeholder="কিভাবে কাজটি করতে হবে তার বিবরণ" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="task-reward">প্রতি কাজের জন্য পুরস্কার (৳)</label>
+                    <input type="number" id="task-reward" min="0.5" step="0.1" placeholder="ন্যূনতম ০.৫০" required>
+                </div>
+                <div class="form-group">
+                    <label for="task-completions">কতজন কাজটি করতে পারবে?</label>
+                    <input type="number" id="task-completions" min="1" placeholder="ন্যূনতম ১ জন" required>
+                </div>
+                
+                <div class="summary-card">
+                    <div class="summary-row"><span>আপনার বর্তমান ব্যালেন্স:</span> <strong id="current-balance">৳ ০.০০</strong></div>
+                    <div class="summary-row"><span>মোট খরচ হবে:</span> <strong id="total-cost">৳ ০.০০</strong></div>
+                    <p id="balance-error" class="balance-error" style="display: none;">আপনার অ্যাকাউন্টে পর্যাপ্ত ব্যালেন্স নেই!</p>
+                </div>
+
+                <button type="submit" class="action-btn-primary" id="submit-task-btn">জব পোস্ট করুন</button>
+            </form>
+        </div>
+    </main>
+    
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/create_task.script.js"></script>
+</body>
+</html>

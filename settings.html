@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সেটিংস</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/settings.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">সেটিংস</h1>
+            <p class="page-subtitle">আপনার অ্যাকাউন্ট ও অ্যাপ পরিচালনা করুন।</p>
+        </div>
+
+        <!-- হিসাব সেকশন -->
+        <div class="card settings-card">
+            <h3 class="card-title">হিসাব</h3>
+            <a href="edit-profile.html" class="settings-item">
+                <div class="settings-icon" style="background-color: #3498db;"><i class="fas fa-user-edit"></i></div>
+                <span>প্রোফাইল এডিট করুন</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <div class="settings-item" id="security-pin-item">
+                <div class="settings-icon" style="background-color: #e67e22;"><i class="fas fa-key"></i></div>
+                <span>নিরাপত্তা পিন</span>
+                <i class="fas fa-chevron-right"></i>
+            </div>
+        </div>
+
+        <!-- অ্যাপ সেকশন -->
+        <div class="card settings-card">
+            <h3 class="card-title">অ্যাপ</h3>
+            <div class="settings-item">
+                <div class="settings-icon" style="background-color: #9b59b6;"><i class="fas fa-moon"></i></div>
+                <span>ডার্ক মোড</span>
+                <div class="toggle-switch">
+                    <input type="checkbox" id="dark-mode-toggle">
+                    <label for="dark-mode-toggle"></label>
+                </div>
+            </div>
+        </div>
+
+        <!-- তথ্য সেকশন -->
+        <div class="card settings-card">
+            <h3 class="card-title">তথ্য</h3>
+            <a href="support.html" class="settings-item">
+                <div class="settings-icon" style="background-color: #1abc9c;"><i class="fas fa-headset"></i></div>
+                <span>সাপোর্ট সেন্টার</span>
+                <i class="fas fa-chevron-right"></i>
+            </a>
+            <!-- ভবিষ্যতে এই পেজগুলো তৈরি করতে পারেন -->
+            <a href="#" class="settings-item"><div class="settings-icon" style="background-color: #34495e;"><i class="fas fa-shield-alt"></i></div><span>প্রাইভেসি পলিসি</span><i class="fas fa-chevron-right"></i></a>
+            <a href="#" class="settings-item"><div class="settings-icon" style="background-color: #7f8c8d;"><i class="fas fa-file-contract"></i></div><span>টার্মস অফ সার্ভিস</span><i class="fas fa-chevron-right"></i></a>
+        </div>
+        
+        <!-- অ্যাকশন সেকশন -->
+        <div class="card settings-card">
+            <button class="action-btn logout" id="logout-btn">লগ আউট</button>
+            <button class="action-btn delete" id="delete-account-btn">অ্যাকাউন্ট ডিলিট করুন</button>
+        </div>
+    </main>
+
+    <!-- নিরাপত্তা পিন মডাল -->
+    <div class="modal-overlay" id="pin-modal">
+        <div class="modal-content">
+            <button class="modal-close-btn">&times;</button>
+            <h3>আপনার নিরাপত্তা পিন সেট করুন</h3>
+            <p class="modal-subtitle">এই ৪-ডিজিটের পিনটি টাকা তোলার সময় প্রয়োজন হবে।</p>
+            <div class="form-group">
+                <label for="new-pin">নতুন পিন</label>
+                <input type="password" id="new-pin" maxlength="4" placeholder="••••">
+            </div>
+            <div class="form-group">
+                <label for="confirm-pin">পিন নিশ্চিত করুন</label>
+                <input type="password" id="confirm-pin" maxlength="4" placeholder="••••">
+            </div>
+            <p id="pin-error" class="error-message"></p>
+            <button class="action-btn-primary" id="save-pin-btn" style="width: 100%;">পিন সেভ করুন</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/settings.script.js"></script>
+</body>
+</html>

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>প্রোফাইল</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/profile.style.css">
+</head>
+<body>
+    <div id="header-placeholder"></div>
+    <div id="sidebar-placeholder"></div>
+
+    <main class="main-content">
+        <div class="card profile-header-card">
+            <a href="edit-profile.html" class="edit-profile-icon" id="edit-profile-icon" style="display: none;" title="প্রোফাইল এডিট করুন">
+                <i class="fas fa-pencil-alt"></i>
+            </a>
+            <div class="profile-cover"></div>
+            <div class="profile-avatar-wrapper">
+                <img src="images/avatar-placeholder.png" alt="প্রোফাইল ছবি" class="profile-avatar" id="profile-avatar" title="প্রোফাইল ছবি পরিবর্তন করুন">
+            </div>
+            <h1 class="profile-name" id="profile-name">লোড হচ্ছে...</h1>
+            <p class="profile-username" id="profile-username">@username</p>
+            
+            <!-- নতুন ডিজাইনের পরিসংখ্যান -->
+            <div class="profile-stats">
+                <div class="stat-item">
+                    <span id="posts-count">۰</span>
+                    <label>পোস্ট</label>
+                </div>
+                <div class="stat-item">
+                    <span id="followers-count">۰</span>
+                    <label>ফলোয়ার</label>
+                </div>
+                <div class="stat-item">
+                    <span id="following-count">۰</span>
+                    <label>ফলোয়িং</label>
+                </div>
+            </div>
+            
+            <div class="profile-actions" id="profile-actions"></div>
+        </div>
+        
+        <div class="section-header">
+            <h2 class="section-title small">পোস্টসমূহ</h2>
+        </div>
+        <div id="user-posts-container">
+            <p class="loading-text">পোস্ট লোড হচ্ছে...</p>
+        </div>
+    </main>
+
+    <div id="modal-placeholders"></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    <script src="js/main.js"></script>
+    <script src="js/profile.script.js"></script>
+</body>
+</html>

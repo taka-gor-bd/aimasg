@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>লগইন করুন</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans Bengali', sans-serif; background-color: #f8f9fa; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .auth-container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 100%; max-width: 400px; text-align: center; }
+        h2 { color: #28a745; margin-bottom: 20px; }
+        .input-group { margin-bottom: 15px; text-align: left; }
+        label { display: block; margin-bottom: 5px; font-weight: 500; }
+        input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        button { width: 100%; padding: 12px; border: none; border-radius: 8px; background: #28a745; color: white; font-size: 16px; font-weight: 700; cursor: pointer; }
+        p { margin-top: 20px; }
+        a { color: #218838; text-decoration: none; }
+        .error { color: red; margin-top: 10px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <h2>আপনার অ্যাকাউন্টে লগইন করুন</h2>
+        <div class="input-group">
+            <label for="email">ই-মেইল</label>
+            <input type="email" id="email" placeholder="example@email.com" required>
+        </div>
+        <div class="input-group">
+            <label for="password">পাসওয়ার্ড</label>
+            <input type="password" id="password" placeholder="আপনার পাসওয়ার্ড" required>
+        </div>
+        <button id="loginBtn">লগইন</button>
+        <p id="error-message" class="error"></p>
+        <p>অ্যাকাউন্ট নেই? <a href="register.html">নতুন অ্যাকাউন্ট তৈরি করুন</a></p>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    
+    <script>
+        const firebaseConfig = {
+          apiKey: "AIzaSyCwtr07rzsBp6yLilCh4EEIl2YDAELYmKM",
+          authDomain: "personal-message-f2930.firebaseapp.com",
+          databaseURL: "https://personal-message-f2930-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "personal-message-f2930",
+          storageBucket: "personal-message-f2930.appspot.com",
+          messagingSenderId: "883994486321",
+          appId: "1:883994486321:web:e527a093dd64fdecb31710",
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        
+        const emailInput = document.getElementById('email');
+        const passwordInput = document.getElementById('password');
+        const loginBtn = document.getElementById('loginBtn');
+        const errorMessage = document.getElementById('error-message');
+
+        // Check if user is already logged in
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                window.location.href = 'home.html';
+            }
+        });
+
+        loginBtn.addEventListener('click', () => {
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            if (!email || !password) {
+                errorMessage.textContent = 'অনুগ্রহ করে ইমেইল এবং পাসওয়ার্ড দিন।';
+                return;
+            }
+
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    window.location.href = 'home.html';
+                })
+                .catch((error) => {
+                    errorMessage.textContent = "লগইন ব্যর্থ হয়েছে। ইমেইল বা পাসওয়ার্ড ভুল।";
+                });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>হোম - স্বাগতম!</title>
+    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="css/main.style.css">
+    <link rel="stylesheet" href="css/home.style.css">
+</head>
+<body>
+    
+    <!-- JS দ্বারা এই খালি div গুলো টেমপ্লেট দিয়ে পূর্ণ করা হবে -->
+    <!-- আপনাকে এখানে কিছু করতে হবে না -->
+
+    <main class="main-content">
+        
+        <!-- ১. ব্যালেন্স এবং আর্নিং কার্ড (নতুন কালার স্কিমের জন্য প্রস্তুত) -->
+        <div class="card earning-card">
+            <div class="balance-details">
+                <div class="balance-item"><div class="balance-title">আজকের আয়</div><div class="balance-amount" id="today-earning">৳ ০.০০</div></div>
+                <div class="balance-divider"></div>
+                <div class="balance-item"><div class="balance-title">মোট ব্যালেন্স</div><div class="balance-amount" id="total-balance">৳ ০.০০</div></div>
+            </div>
+            <div class="balance-actions">
+                <a href="deposit.html" class="action-btn deposit-btn"><i class="fas fa-plus-circle"></i> ডিপোজিট</a>
+                <a href="withdraw.html" class="action-btn withdraw-btn"><i class="fas fa-paper-plane"></i> উইথড্র</a>
+            </div>
+        </div>
+
+        <!-- ২. প্রধান ৮টি ফিচারের বাটন গ্রিড -->
+        <div class="features-grid-card">
+            <div class="features-grid">
+                <a href="tasks.html" class="feature-item"><div class="icon-bg"><i class="fas fa-tasks"></i></div><span>কাজ করুন</span></a>
+                <a href="create_task.html" class="feature-item"><div class="icon-bg"><i class="fas fa-bullhorn"></i></div><span>মাইক্রো জব</span></a>
+                <a href="refer.html" class="feature-item"><div class="icon-bg"><i class="fas fa-user-plus"></i></div><span>রেফার করুন</span></a>
+                <a href="activity.html" class="feature-item"><div class="icon-bg"><i class="fas fa-history"></i></div><span>হিস্টোরি</span></a>
+                <a href="leaderboard.html" class="feature-item"><div class="icon-bg"><i class="fas fa-trophy"></i></div><span>লিডারবোর্ড</span></a>
+                <a href="quiz.html" class="feature-item"><div class="icon-bg"><i class="fas fa-question-circle"></i></div><span>কুইজ খেলুন</span></a>
+                <a href="plan.html" class="feature-item"><div class="icon-bg"><i class="fas fa-crown"></i></div><span>প্ল্যান আপগ্রেড</span></a>
+                <a href="deposit.html" class="feature-item"><div class="icon-bg"><i class="fas fa-wallet"></i></div><span>ওয়ালেট</span></a>
+            </div>
+            <a href="all_features.html" class="see-more-button">
+                <span>আরও দেখুন</span><i class="fas fa-chevron-right"></i>
+            </a>
+        </div>
+        
+        <!-- ৩. নিউজ ফিড সেকশন -->
+        <div class="section-header">
+            <h2 class="section-title">প্ল্যাটফর্ম আপডেট</h2>
+            <a href="updates.html" class="see-all-link">সব দেখুন</a>
+        </div>
+        <div class="feed-container" id="feed-container">
+            <p class="loading-text">আপডেট লোড হচ্ছে...</p>
+        </div>
+
+    </main>
+    
+    <!-- পোস্ট অপশন পপ-আপ (থ্রি-ডট মেনু) -->
+    <div class="popup-menu-overlay" id="post-options-overlay">
+        <div class="popup-menu" id="post-options-menu">
+            <!-- JS দ্বারা অপশন যোগ করা হবে -->
+        </div>
+    </div>
+    
+    <!-- JS ফাইলগুলো -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database-compat.js"></script>
+    
+    <script src="js/main.js"></script>
+    <script src="js/home.script.js"></script>
+</body>
+</html>
